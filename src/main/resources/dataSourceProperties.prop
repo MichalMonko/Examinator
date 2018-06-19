@@ -1,0 +1,19 @@
+#CONNECTION PROPERTIES
+minPoolSize=5
+maxPoolSize=20
+initialPoolSize=5
+maxIdleTime=3000
+#
+#JDBC PROPERTIES
+#
+driverClass=com.mysql.jdbc.Driver
+url=jdbc:mysql://localhost:3306/examinator_data?useSSL=false
+username=hbstudent
+password=hbstudent
+#
+#HIBERNATE PROPERTIES
+#
+dialectClass=org.hibernate.dialect.MySQLDialect
+showSql=true
+packagesToScan=com.warchlak.entity
+
