@@ -7,7 +7,7 @@ maxIdleTime=3000
 #JDBC PROPERTIES
 #
 driverClass=com.mysql.jdbc.Driver
-url=jdbc:mysql://localhost:3306/examinator_data?useSSL=false
+url=jdbc:mysql://localhost:3306/questions_storage?useSSL=false
 username=hbstudent
 password=hbstudent
 #
