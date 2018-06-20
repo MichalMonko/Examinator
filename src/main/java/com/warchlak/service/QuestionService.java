@@ -1,6 +1,7 @@
 package com.warchlak.service;
 
 import com.warchlak.dao.QuestionDao;
+import com.warchlak.dao.QuestionDaoInterface;
 import com.warchlak.entity.Answer;
 import com.warchlak.entity.Course;
 import com.warchlak.entity.Major;
@@ -8,71 +9,60 @@ import com.warchlak.entity.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 public class QuestionService implements QuestionServiceInterface
 {
 	
-	private final QuestionDao questionDAO;
+	private final QuestionDaoInterface questionDAO;
 	
 	@Autowired
-	public QuestionService(QuestionDao questionDAO)
+	public QuestionService(QuestionDaoInterface questionDAO)
 	{
 		this.questionDAO = questionDAO;
 	}
 	
 	@Override
+	@Transactional
 	public List<Major> getMajors()
 	{
-		return null;
+		return questionDAO.getMajors();
 	}
 	
 	@Override
+	@Transactional
 	public Major getMajor(int id)
 	{
-		return null;
+		return questionDAO.getMajor(id);
 	}
 	
 	@Override
-	public List<Course> getCoursesForMajor(int majorId)
-	{
-		return null;
-	}
-	
-	@Override
-	public Course getCoures(int id)
-	{
-		return null;
-	}
-	
-	@Override
-	public List<Question> getQuestionForCourse(int courseId)
-	{
-		return null;
-	}
-	
-	@Override
+	@Transactional
 	public Question getQuestion(int id)
 	{
-		return null;
+		return questionDAO.getQuestion(id);
 	}
 	
 	@Override
-	public List<Answer> getAnswerForQuestion(int questionId)
+	@Transactional
+	public Course getCourse(int id)
 	{
-		return null;
+		return questionDAO.getCourse(id);
 	}
 	
 	@Override
+	@Transactional
 	public void saveQuestion(Question question)
 	{
-	
+		questionDAO.saveQuestion(question);
 	}
 	
 	@Override
+	@Transactional
 	public void saveAnswer(Answer answer)
 	{
-	
+		questionDAO.saveAnswer(answer);
 	}
 }

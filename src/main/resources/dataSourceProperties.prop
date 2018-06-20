@@ -8,8 +8,8 @@ maxIdleTime=3000
 #
 driverClass=com.mysql.jdbc.Driver
 url=jdbc:mysql://localhost:3306/questions_storage?useSSL=false
-username=hbstudent
-password=hbstudent
+user=root
+password=root
 #
 #HIBERNATE PROPERTIES
 #

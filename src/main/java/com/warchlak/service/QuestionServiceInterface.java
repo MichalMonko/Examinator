@@ -13,18 +13,11 @@ public interface QuestionServiceInterface
 	
 	public Major getMajor(int id);
 	
-	public List<Course> getCoursesForMajor(int majorId);
-	
-	public Course getCoures(int id);
-	
-	public List<Question> getQuestionForCourse(int courseId);
+	public Course getCourse(int id);
 	
 	public Question getQuestion(int id);
-	
-	public List<Answer> getAnswerForQuestion(int questionId);
 	
 	public void saveQuestion(Question question);
 	
 	public void saveAnswer(Answer answer);
-	
 }

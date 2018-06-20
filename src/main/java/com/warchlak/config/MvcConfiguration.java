@@ -10,7 +10,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 @Configuration
 @ComponentScan(basePackages = "com.warchlak")
 @EnableWebMvc
+@EnableTransactionManagement
 @PropertySource("classpath:dataSourceProperties.prop")
 public class MvcConfiguration
 {
@@ -64,7 +65,7 @@ public class MvcConfiguration
 			dataSource.setDriverClass(environment.getProperty("driverClass"));
 			dataSource.setJdbcUrl(environment.getProperty("url"));
 			
-			dataSource.setUser(environment.getProperty("username"));
+			dataSource.setUser(environment.getProperty("user"));
 			dataSource.setPassword(environment.getProperty("password"));
 			
 		} catch (Exception e)
