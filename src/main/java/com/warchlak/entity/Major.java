@@ -1,7 +1,6 @@
 package com.warchlak.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.util.List;

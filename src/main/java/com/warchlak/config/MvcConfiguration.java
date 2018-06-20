@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import javax.sql.DataSource;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -87,13 +88,13 @@ public class MvcConfiguration
 	}
 	
 	@Bean
-	public LocalSessionFactoryBean getSessionFactory()
+	public LocalSessionFactoryBean getSessionFactory(DataSource dataSource)
 	{
-		
+		dataSource = getDataSource();
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		
 		sessionFactory.setHibernateProperties(getHibernateProperties());
-		sessionFactory.setDataSource(getDataSource());
+		sessionFactory.setDataSource(dataSource);
 		sessionFactory.setPackagesToScan(environment.getProperty("packagesToScan"));
 		
 		return sessionFactory;

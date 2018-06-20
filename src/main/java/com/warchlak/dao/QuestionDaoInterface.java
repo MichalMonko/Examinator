@@ -14,6 +14,8 @@ public interface QuestionDaoInterface
 	
 	public Major getMajor(int id);
 	
+	public List<Course> getCourses();
+	
 	public Course getCourse(int id);
 	
 	public Question getQuestion(int id);

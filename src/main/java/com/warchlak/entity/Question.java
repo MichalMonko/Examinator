@@ -17,10 +17,9 @@ public class Question
 	
 	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE,
 			CascadeType.PERSIST, CascadeType.REFRESH})
-	@JoinColumn(name = "course_id")
 	private Course course;
 	
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "questions_answers_relationship",
 			joinColumns = @JoinColumn(name = "question_id"),
 			inverseJoinColumns = @JoinColumn(name = "answer_id"))

@@ -1,10 +1,13 @@
 package com.warchlak.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "courses")
+@JsonIgnoreProperties(value = {"questions", "major"})
 public class Course
 {
 	@Id
@@ -17,10 +20,9 @@ public class Course
 	
 	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE,
 			CascadeType.PERSIST, CascadeType.REFRESH})
-	@JoinColumn(name = "major_id")
 	private Major major;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "course")
 	private List<Question> questions;
 	
 	public Course(String name, Major major)

@@ -29,7 +29,7 @@ public class QuestionDao implements QuestionDaoInterface
 	{
 		Session session = sessionFactory.getCurrentSession();
 		Query<Major> query = session.createQuery("FROM Major", Major.class);
-		return  query.getResultList();
+		return query.getResultList();
 	}
 	
 	@Override
@@ -37,6 +37,14 @@ public class QuestionDao implements QuestionDaoInterface
 	{
 		Session session = sessionFactory.getCurrentSession();
 		return session.get(Major.class, id);
+	}
+	
+	@Override
+	public List<Course> getCourses()
+	{
+		Session session = sessionFactory.getCurrentSession();
+		Query<Course> query = session.createQuery("From Course", Course.class);
+		return query.getResultList();
 	}
 	
 	@Override

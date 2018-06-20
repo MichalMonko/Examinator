@@ -47,6 +47,13 @@ public class QuestionService implements QuestionServiceInterface
 	
 	@Override
 	@Transactional
+	public List<Course> getCourses()
+	{
+		return questionDAO.getCourses();
+	}
+	
+	@Override
+	@Transactional
 	public Course getCourse(int id)
 	{
 		return questionDAO.getCourse(id);

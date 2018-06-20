@@ -8,13 +8,13 @@ public class Answer
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JoinColumn(name = "id")
+	@Column(name = "id")
 	private int id;
 	
-	@JoinColumn(name = "content")
+	@Column(name = "content")
 	private String content;
 	
-	@JoinColumn(name = "is_correct")
+	@Column(name = "is_correct")
 	private boolean isCorrect;
 	
 	public Answer(String content, boolean isCorrect)
