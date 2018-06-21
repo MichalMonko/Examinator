@@ -38,6 +38,12 @@ public class Question
 		this.answers = answers;
 	}
 	
+	public Question(String content, List<Answer> answers)
+	{
+		this.content = content;
+		this.answers = answers;
+	}
+	
 	public Question()
 	{
 	}
@@ -80,5 +86,18 @@ public class Question
 	public void setAnswers(List<Answer> answers)
 	{
 		this.answers = answers;
+	}
+	
+	public Answer getCorrectAnswer()
+	{
+		for (Answer answer : answers)
+		{
+			if (answer.isCorrect())
+			{
+				return answer;
+			}
+		}
+		
+		return null;
 	}
 }
