@@ -102,6 +102,8 @@ public class ParserTest
 			Assertions.assertEquals(firstQuestion.getAnswers().get(3).getContent(),
 					"d) materiał który samoistnie powstał w wyniku powstałego mieszku ".trim());
 			
+			Assertions.assertTrue(parser.getFileErrorResponse().isEmpty());
+			
 		} catch (Exception e)
 		{
 		
