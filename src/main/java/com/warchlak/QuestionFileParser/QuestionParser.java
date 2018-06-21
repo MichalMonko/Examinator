@@ -56,10 +56,10 @@ public class QuestionParser
 		
 		try (BufferedReader reader = new BufferedReader
 				(new InputStreamReader
-						(new FileInputStream(file), Charset.forName("utf16")))
+						(new FileInputStream(file), Charset.forName("cp1250")))
 		)
 		{
-			correctAnswerLine = reader.readLine();
+			correctAnswerLine = reader.readLine().trim();
 			
 			if (!correctAnswerLine.startsWith("X"))
 			{
@@ -67,7 +67,7 @@ public class QuestionParser
 			}
 			
 			int correctQuestionNumber = correctAnswerLine.indexOf('1') - 1;
-			questionLine = reader.readLine();
+			questionLine = reader.readLine().trim();
 			
 			int counter = 0;
 			boolean isCorrect;
@@ -75,7 +75,7 @@ public class QuestionParser
 			while ((answerLine = reader.readLine()) != null)
 			{
 				isCorrect = (counter == correctQuestionNumber);
-				answers.add(new Answer(answerLine, isCorrect));
+				answers.add(new Answer(answerLine.trim(), isCorrect));
 				counter++;
 			}
 		} catch (IOException e)

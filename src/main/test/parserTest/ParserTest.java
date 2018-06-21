@@ -57,7 +57,7 @@ public class ParserTest
 		Assertions.assertThrows(NoSuchFileException.class, () ->
 		{
 			metadata = new QuestionMetadata(
-					"src\\main\\resources\\TestResources\\ParserTest\\baza", "Sample name");
+					"src\\main\\resources\\TestResources\\ParserTest\\EmptyDirectory", "Sample name");
 			QuestionParser parser = new QuestionParser(metadata);
 			parser.getParsedQuestions();
 		});
@@ -86,21 +86,21 @@ public class ParserTest
 			Question firstQuestion = questions.get(0);
 			
 			Assertions.assertEquals(firstQuestion.getContent(),
-					"Półprzewodnik samoistny to: ");
+					"Półprzewodnik samoistny to: ".trim());
 			Assertions.assertEquals(firstQuestion.getCorrectAnswer().getContent(),
-					"c) czysty półprzewodnik pozbawiony domieszek i z efektów sieci ");
+					"c) czysty półprzewodnik pozbawiony domieszek i z efektów sieci ".trim());
 			
-			Assertions.assertEquals(firstQuestion.getAnswers().get(0),
-					"a) materiał samoistnie generujący prąd ");
+			Assertions.assertEquals(firstQuestion.getAnswers().get(0).getContent(),
+					"a) materiał samoistnie generujący prąd ".trim());
 			
-			Assertions.assertEquals(firstQuestion.getAnswers().get(1),
-					"b) półprzewodnik z pojedynczym elektronem walencyjnym ");
+			Assertions.assertEquals(firstQuestion.getAnswers().get(1).getContent(),
+					"b) półprzewodnik z pojedynczym elektronem walencyjnym ".trim());
 			
-			Assertions.assertEquals(firstQuestion.getAnswers().get(2),
-					"c) czysty półprzewodnik pozbawiony domieszek i z efektów sieci");
+			Assertions.assertEquals(firstQuestion.getAnswers().get(2).getContent(),
+					"c) czysty półprzewodnik pozbawiony domieszek i z efektów sieci".trim());
 			
-			Assertions.assertEquals(firstQuestion.getAnswers().get(3),
-					"d) materiał który samoistnie powstał w wyniku powstałego mieszku ");
+			Assertions.assertEquals(firstQuestion.getAnswers().get(3).getContent(),
+					"d) materiał który samoistnie powstał w wyniku powstałego mieszku ".trim());
 			
 		} catch (Exception e)
 		{
