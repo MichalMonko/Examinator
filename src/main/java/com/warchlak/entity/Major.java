@@ -6,8 +6,8 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="majors")
-@JsonIgnoreProperties(value = {"courses"})
+@Table(name = "majors")
+//@JsonIgnoreProperties(value = {"courses"})
 public class Major
 {
 	@Id
@@ -18,7 +18,7 @@ public class Major
 	@Column(name = "name")
 	private String name;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "major")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "major")
 	private List<Course> courses;
 	
 	public Major()

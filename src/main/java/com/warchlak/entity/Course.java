@@ -22,7 +22,7 @@ public class Course
 			CascadeType.PERSIST, CascadeType.REFRESH})
 	private Major major;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "course")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "course")
 	private List<Question> questions;
 	
 	public Course(String name, Major major)
