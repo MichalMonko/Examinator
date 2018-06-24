@@ -19,7 +19,7 @@ public class Question
 			CascadeType.PERSIST, CascadeType.REFRESH})
 	private Course course;
 	
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "questions_answers_relationship",
 			joinColumns = @JoinColumn(name = "question_id"),
 			inverseJoinColumns = @JoinColumn(name = "answer_id"))

@@ -37,7 +37,6 @@
 <div class="container">
     <div class="jumbotron bg-dark text-white">
         <h1 class="text-center">Testowniki</h1>
-        <h2>${pageContext}</h2>
     </div>
     <div class="row">
         <div class="col d-flex">

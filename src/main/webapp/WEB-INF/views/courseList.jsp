@@ -41,41 +41,41 @@
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a class="text-center text-white btn btn-primary btn-large btn-block"
-                               data-toggle="collapse" href="#${major.id}">${major.name}<span class="caret"></span></a>
+                               data-toggle="collapse" href="#${major.id}">${major.name}</a>
                         </h4>
                     </div>
 
                     <div id="${major.id}" class="panel-collapse collapse">
                         <c:forEach var="course" items="${major.courses}">
 
-                        <c:url var="addQuestionForm" value="/addQuestion">
-                            <c:param name="courseId" value="${course.id}"/>
-                        </c:url>
-                        <c:url var="addQuestionFiles" value="/addQuestion">
-                            <c:param name="courseId" value="${course.id}"/>
-                        </c:url>
-                        <c:url var="showQuestions" value="/addQuestion">
-                            <c:param name="courseId" value="${course.id}"/>
-                        </c:url>
+                            <c:url var="addQuestionForm" value="/showAddQuestionForm">
+                                <c:param name="courseId" value="${course.id}"/>
+                            </c:url>
+                            <c:url var="addQuestionFiles" value="/showAddQuestionForm">
+                                <c:param name="courseId" value="${course.id}"/>
+                            </c:url>
+                            <c:url var="showQuestions" value="/showAddQuestionForm">
+                                <c:param name="courseId" value="${course.id}"/>
+                            </c:url>
 
-                        <div class="panel-body">
-                            <div class="dropdown">
-                                <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
-                                   data-toggle="dropdown">${course.name}<span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
-                                           href="${addQuestionForm}">Dodaj pytanie (formularz)</a>
-                                    <li>
-                                        <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
-                                           href="${addQuestionFiles}">Dodaj pytanie (Z plików)</a>
-                                    <li>
-                                        <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
-                                           href="${showQuestions}">Wyświetl pytania</a>
-                                </ul>
+                            <div class="panel-body">
+                                <div class="dropdown">
+                                    <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
+                                       data-toggle="dropdown">${course.name}<span class="caret"></a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
+                                               href="${addQuestionForm}">Dodaj pytanie (formularz)</a>
+                                        <li>
+                                            <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
+                                               href="${addQuestionFiles}">Dodaj pytanie (Z plików)</a>
+                                        <li>
+                                            <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
+                                               href="${showQuestions}">Wyświetl pytania</a>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                            </c:forEach>
+                        </c:forEach>
                     </div>
                     </c:forEach>
                 </div>
