@@ -52,13 +52,14 @@
                 </c:otherwise>
             </c:choose>
 
-            <form:form id="question_add_form" action="/addQuestion" method="post" modelAttribute="question">
+            <form:form id="question_add_form" action="/addQuestion"
+                       method="post" modelAttribute="question">
 
                 <input type="hidden" name="courseId" value="${courseId}">
 
                 <div class="form-group">
                     <label class="control-label">Pytanie:</label>
-                    <textarea name="content" rows="5" class="form-control"></textarea>
+                    <textarea name="content" rows="5" class="form-control" required></textarea>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Odpowiedź A</label>
@@ -80,14 +81,22 @@
                     <button id="add_question_button" type="button" class="btn btn-primary"
                             onclick="appendAnotherAnswerField()">Dodaj odpowiedz
                     </button>
-                    <input type="submit" value="Wyslij pytanie" class="btn pull-right">
+                    <input type="submit" value="Wyslij pytanie" class="btn float-right">
                 </div>
 
             </form:form>
+        </div>
 
-
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="float-right">
+                <a href="showCoursesList" class="btn btn-info"><span
+                        class="glyphicon glyphicon-arrow-left">Powrót do listy</span></a>
+            </div>
         </div>
     </div>
+</div>
 </div>
 
 

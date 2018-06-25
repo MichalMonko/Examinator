@@ -48,7 +48,7 @@ public class HomeController
 	}
 	
 	@RequestMapping(value = "/showAddQuestionForm")
-	public ModelAndView showAddQuestionForm(ServletRequest request, ModelMap model, @ModelAttribute("courseId") int courseId,
+	public ModelAndView showAddQuestionForm(ModelMap model, @ModelAttribute("courseId") int courseId,
 	                                        @ModelAttribute("question") Question question)
 	{
 		Course course = questionService.getCourse(courseId);
@@ -57,6 +57,17 @@ public class HomeController
 		model.addAttribute("courseId", courseId);
 		
 		return new ModelAndView("addQuestionForm", model);
+	}
+	
+	@RequestMapping("/showAddQuestionFiles")
+	public ModelAndView showAddQuestionFiles(ModelMap model, @ModelAttribute("courseId") int courseId)
+	{
+		Course course = questionService.getCourse(courseId);
+		
+		model.addAttribute("course", course);
+		model.addAttribute("courseId", courseId);
+		
+		return new ModelAndView("ReadQuestionsFromFiles", model);
 	}
 	
 	@PostMapping(value = "/addQuestion")
@@ -98,6 +109,10 @@ public class HomeController
 		
 		model.addAttribute("courseId", courseId);
 		model.addAttribute("success", success);
+		if (course != null)
+		{
+			model.addAttribute("course", course);
+		}
 		
 		return new ModelAndView("addQuestionForm", model);
 	}

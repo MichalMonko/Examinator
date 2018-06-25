@@ -2,14 +2,13 @@ package com.warchlak.rest.controller;
 
 import com.warchlak.entity.Course;
 import com.warchlak.entity.Major;
+import com.warchlak.entity.Question;
 import com.warchlak.rest.exceptionHandling.ResourceNotFoundException;
 import com.warchlak.service.QuestionServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
 import java.util.List;
 
 @RestController
@@ -58,4 +57,8 @@ public class QuestionRestController
 		return course;
 	}
 	
+	@PostMapping(value = "/questions/{courseId}", consumes = "application/json")
+	public void addQuestions(@PathVariable("courseId") int courseId, @RequestBody List<Question> questions)
+	{
+	}
 }

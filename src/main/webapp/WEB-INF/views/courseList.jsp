@@ -51,7 +51,7 @@
                             <c:url var="addQuestionForm" value="/showAddQuestionForm">
                                 <c:param name="courseId" value="${course.id}"/>
                             </c:url>
-                            <c:url var="addQuestionFiles" value="/showAddQuestionForm">
+                            <c:url var="addQuestionFiles" value="/showAddQuestionFiles">
                                 <c:param name="courseId" value="${course.id}"/>
                             </c:url>
                             <c:url var="showQuestions" value="/showAddQuestionForm">
