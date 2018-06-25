@@ -11,7 +11,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
@@ -23,7 +26,7 @@ import java.util.logging.Logger;
 @EnableWebMvc
 @EnableTransactionManagement
 @PropertySource("classpath:dataSourceProperties.prop")
-public class MvcConfiguration
+public class MvcConfiguration implements WebMvcConfigurer
 {
 	
 	private static final Logger LOGGER = Logger.getLogger(MvcConfiguration.class.getName());
@@ -45,6 +48,12 @@ public class MvcConfiguration
 		resolver.setSuffix(".jsp");
 		
 		return resolver;
+	}
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry)
+	{
+		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 	
 	@Bean

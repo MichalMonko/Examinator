@@ -61,15 +61,15 @@ public class QuestionService implements QuestionServiceInterface
 	
 	@Override
 	@Transactional
-	public void saveQuestion(Question question)
+	public int saveQuestion(Question question)
 	{
-		questionDAO.saveQuestion(question);
+		return questionDAO.saveQuestion(question);
 	}
 	
 	@Override
 	@Transactional
-	public void saveAnswer(Answer answer)
+	public int saveAnswer(Answer answer)
 	{
-		questionDAO.saveAnswer(answer);
+		return questionDAO.saveAnswer(answer);
 	}
 }

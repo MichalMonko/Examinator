@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--<%@page contentType="text/html" pageEncoding="UTF-8"%>--%>
 <%--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"--%>
 <%--"http://www.w3.org/TR/html4/loose.dtd">--%>
@@ -41,7 +42,7 @@
     <div class="row">
         <div class="col d-flex">
             <div class="card">
-                <img class="card-img-top" src="${pageContext.request.contextPath}/resources/icons/write_question.png">
+                <img class="card-img-top" src="${pageContext.request.contextPath}/resources/icons/write_question.png" alt="write question icon">
                 <div class="card-body">
                     <h4 class="card-title">Dodaj nowe pytanie</h4>
                     <p class="card-text">
@@ -53,7 +54,7 @@
         </div>
         <div class="col d-flex">
             <div class="card">
-                <img class="card-img-top" src="${pageContext.request.contextPath}/resources/icons/lookup_base_icon.png">
+                <img class="card-img-top" src="${pageContext.request.contextPath}/resources/icons/lookup_base_icon.png" alt="lookup database icon">
                 <div class="card-body">
                     <h4 class="card-title">Przeglądaj bazę</h4>
                     <p class="card-text">

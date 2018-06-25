@@ -62,16 +62,18 @@ public class QuestionDao implements QuestionDaoInterface
 	}
 	
 	@Override
-	public void saveQuestion(Question question)
+	public int saveQuestion(Question question)
 	{
 		Session session = sessionFactory.getCurrentSession();
 		session.saveOrUpdate(question);
+		return question.getId();
 	}
 	
 	@Override
-	public void saveAnswer(Answer answer)
+	public int saveAnswer(Answer answer)
 	{
 		Session session = sessionFactory.getCurrentSession();
 		session.saveOrUpdate(answer);
+		return answer.getId();
 	}
 }

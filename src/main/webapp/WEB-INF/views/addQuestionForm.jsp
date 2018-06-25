@@ -1,5 +1,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: fff
@@ -23,39 +24,7 @@
 
     <title>Hello, world!</title>
 
-    <script type="text/JavaScript">
-
-        var counter = 'E'.charCodeAt(0);
-
-        function appendAnotherAnswerField() {
-
-            var formGroup = document.createElement('div');
-            formGroup.setAttribute("class", "form-group");
-
-            var label = document.createElement('label');
-            label.setAttribute("class", "controlLabel");
-            var labelNode = document.createTextNode("Odpowiedz " + String.fromCharCode(counter));
-            label.appendChild(labelNode);
-
-            var answerField = document.createElement('textarea');
-            answerField.setAttribute("form", "question_add_form");
-            // answerField.setAttribute("id", "answer");
-            answerField.setAttribute("name", "answer");
-            answerField.setAttribute("rows", "5");
-            answerField.setAttribute("class", "form-control");
-
-            var break_line = document.createElement('br');
-
-            formGroup.appendChild(label);
-            formGroup.appendChild(break_line);
-            formGroup.appendChild(answerField);
-
-            var form = document.getElementById("question_add_form");
-
-            form.insertBefore(formGroup,document.getElementById("submit_section"));
-            counter++;
-        }
-    </script>
+    <script type="text/javascript" src="/resources/javascript/addQuestion.js"></script>
 
 </head>
 
@@ -68,13 +37,28 @@
         <div class="col-lg-8">
             <h2>Kurs: ${course.name}</h2>
 
+            <c:choose>
+                <c:when test="${empty success}">
+                </c:when>
+                <c:when test="${success}">
+                    <div class="alert alert-success" role="alert">
+                        <strong>Sukces! </strong>Pytanie zostało z powodzeniem dodane do bazy.
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Niepowodzenie! </strong>Dodawanie pytania do bazy nie powiodło się!
+                    </div>
+                </c:otherwise>
+            </c:choose>
+
             <form:form id="question_add_form" action="/addQuestion" method="post" modelAttribute="question">
 
                 <input type="hidden" name="courseId" value="${courseId}">
 
                 <div class="form-group">
                     <label class="control-label">Pytanie:</label>
-                    <form:textarea path="content" name="question_input" rows="5" class="form-control"/>
+                    <textarea name="content" rows="5" class="form-control"></textarea>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Odpowiedź A</label>

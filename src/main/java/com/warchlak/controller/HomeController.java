@@ -1,24 +1,19 @@
 package com.warchlak.controller;
 
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.warchlak.entity.Answer;
 import com.warchlak.entity.Course;
 import com.warchlak.entity.Major;
 import com.warchlak.entity.Question;
-import com.warchlak.service.QuestionService;
 import com.warchlak.service.QuestionServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletRequest;
 import java.util.ArrayList;
@@ -57,18 +52,24 @@ public class HomeController
 	                                        @ModelAttribute("question") Question question)
 	{
 		Course course = questionService.getCourse(courseId);
-		model.addAttribute("courseId", courseId);
+		
 		model.addAttribute("course", course);
+		model.addAttribute("courseId", courseId);
+		
 		return new ModelAndView("addQuestionForm", model);
 	}
 	
 	@PostMapping(value = "/addQuestion")
-	public String addQuestion(@ModelAttribute("question") Question question,
-	                          ServletRequest request)
+	public ModelAndView addQuestion(ModelMap model, @ModelAttribute("question") Question question,
+	                                ServletRequest request)
 	{
+		boolean success = true;
+		int courseId = Integer.parseInt(request.getParameter("courseId"));
+		Course course = questionService.getCourse(courseId);
+		
 		if (question.getContent() == null)
 		{
-			request.setAttribute("success", false);
+			success = false;
 		}
 		else if (request.getParameterValues("answer") != null)
 		{
@@ -82,21 +83,22 @@ public class HomeController
 				answers.add(answer);
 			}
 			question.setAnswers(answers);
-			
-			int courseId = Integer.parseInt(request.getParameter("courseId"));
-			Course course = questionService.getCourse(courseId);
-			
-			if(course != null) {
-				question.setCourse(course);
-				question.setAnswers(answers);
-				//TODO save question should return int
-				questionService.saveQuestion(question);
-				request.setAttribute("success", true);
-			}
-			else {
-				request.setAttribute("success", false);
-			}
 		}
-		return "redirect:/showAddQuestionForm";
+		if (course != null)
+		{
+			
+			question.setCourse(course);
+			questionService.saveQuestion(question);
+		}
+		else
+		{
+			success = false;
+		}
+		
+		
+		model.addAttribute("courseId", courseId);
+		model.addAttribute("success", success);
+		
+		return new ModelAndView("addQuestionForm", model);
 	}
 }

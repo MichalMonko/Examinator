@@ -19,7 +19,7 @@ public interface QuestionServiceInterface
 	
 	public Question getQuestion(int id);
 	
-	public void saveQuestion(Question question);
+	public int saveQuestion(Question question);
 	
-	public void saveAnswer(Answer answer);
+	public int saveAnswer(Answer answer);
 }
