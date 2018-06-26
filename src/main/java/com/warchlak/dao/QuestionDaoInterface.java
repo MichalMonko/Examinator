@@ -24,4 +24,7 @@ public interface QuestionDaoInterface
 	
 	public int saveAnswer(Answer answer);
 	
+	public int saveCourse(Course course);
+	
+	Course saveQuestions(int courseId, List<Question> questions);
 }

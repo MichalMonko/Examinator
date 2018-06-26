@@ -29,11 +29,11 @@
 
 </head>
 
-<body>
+<body class="bg-dark">
 <div class="container-fluid bg-dark text-white">
     <div class="row">
         <div class="col-sm-2"></div>
-        <div class="col-sm-6">
+        <div class="col-sm-8">
             <div class="panel-group">
 
                 <c:forEach var="major" items="${majors}">

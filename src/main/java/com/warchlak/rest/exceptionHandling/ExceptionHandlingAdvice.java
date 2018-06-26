@@ -15,7 +15,19 @@ public class ExceptionHandlingAdvice
 	{
 		ErrorResponse errorResponse = new ErrorResponse(
 				HttpStatus.NOT_FOUND.value(),
-				"Resource not found in the data source",
+				e.getMessage(),
+				System.currentTimeMillis()
+		);
+		
+		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler
+	ResponseEntity<ErrorResponse> handleBadBindingException(BindingErrorException e)
+	{
+		ErrorResponse errorResponse = new ErrorResponse(
+				HttpStatus.BAD_REQUEST.value(),
+				e.getMessage(),
 				System.currentTimeMillis()
 		);
 		

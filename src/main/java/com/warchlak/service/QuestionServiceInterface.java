@@ -22,4 +22,8 @@ public interface QuestionServiceInterface
 	public int saveQuestion(Question question);
 	
 	public int saveAnswer(Answer answer);
+	
+	int saveCourse(Course course);
+	
+	Course saveQuestions(int courseId, List<Question> questions);
 }

@@ -4,6 +4,8 @@ import com.warchlak.entity.Answer;
 import com.warchlak.entity.Course;
 import com.warchlak.entity.Major;
 import com.warchlak.entity.Question;
+import com.warchlak.rest.exceptionHandling.ResourceNotFoundException;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -76,4 +78,38 @@ public class QuestionDao implements QuestionDaoInterface
 		session.saveOrUpdate(answer);
 		return answer.getId();
 	}
+	
+	@Override
+	public int saveCourse(Course course)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.saveOrUpdate(course);
+		return course.getId();
+	}
+	
+	@Override
+	public Course saveQuestions(int courseId, List<Question> questions)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		Course course = session.get(Course.class, courseId);
+		if (course == null)
+		{
+			throw new ResourceNotFoundException("Course with id " + courseId + " cannot be found");
+		}
+		
+		for (Question question : questions)
+		{
+			question.setCourse(course);
+		}
+		
+		Hibernate.initialize(course.getQuestions());
+		course.getQuestions().addAll(questions);
+		
+		System.out.println(course.getId());
+		
+		session.saveOrUpdate(course);
+		return course;
+	}
+	
+	
 }
