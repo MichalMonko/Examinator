@@ -71,9 +71,6 @@ function readFile(file) {
 
             filestatusDiv.appendChild(fileStatusAlert);
             counter--;
-            // if (counter <= 0) {
-            //     sendFiles();
-            // }
         }
     };
     reader.readAsText(file, "cp1250");
@@ -87,7 +84,7 @@ function convertToObjects(text, file) {
     if (answerLine.charAt(0).toLowerCase() !== 'x') {
         throw "Plik " + file.name + " ma niewłaściwy format!";
     }
-    var correctAnswer = answerLine.indexOf('1') - 1;
+    var correctAnswer = (answerLine.indexOf('1') + 1);
 
     var questionLine = lines[1];
 
@@ -96,9 +93,8 @@ function convertToObjects(text, file) {
         if (answerString === "") {
             continue;
         }
-        var isCorrect = (i === correctAnswer);
-        var answer = {"content": answerString, "isCorrect": isCorrect};
-        console.log(answerString);
+        var correct = (i === correctAnswer);
+        var answer = {"content": answerString, "correct": correct};
         answers.push(answer);
     }
 

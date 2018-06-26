@@ -15,12 +15,12 @@ public class Answer
 	private String content;
 	
 	@Column(name = "is_correct")
-	private boolean isCorrect;
+	private boolean correct;
 	
 	public Answer(String content, boolean isCorrect)
 	{
 		this.content = content;
-		this.isCorrect = isCorrect;
+		this.correct = isCorrect;
 	}
 	
 	public Answer()
@@ -49,11 +49,11 @@ public class Answer
 	
 	public boolean isCorrect()
 	{
-		return isCorrect;
+		return correct;
 	}
 	
 	public void setCorrect(boolean correct)
 	{
-		isCorrect = correct;
+		this.correct = correct;
 	}
 }
