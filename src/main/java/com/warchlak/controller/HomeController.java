@@ -85,13 +85,22 @@ public class HomeController
 		else if (request.getParameterValues("answer") != null)
 		{
 			String[] answersContent = request.getParameterValues("answer");
+			String[] isCorrect = request.getParameterValues("correct");
 			List<Answer> answers = new ArrayList<>();
+			
+			int counter = 0;
+			boolean correct = false;
 			
 			for (String answerString : answersContent)
 			{
+				correct = (isCorrect[counter].equals("1"));
+				
 				Answer answer = new Answer();
 				answer.setContent(answerString);
+				answer.setCorrect(correct);
 				answers.add(answer);
+				
+				counter++;
 			}
 			question.setAnswers(answers);
 		}
