@@ -3,8 +3,7 @@ var counter;
 
 function sendFiles() {
     var courseId = document.getElementById("courseId").value;
-    if(counter > 0 )
-    {
+    if (counter > 0) {
 
     }
 
@@ -36,6 +35,9 @@ function sendFiles() {
 }
 
 function readFiles() {
+    var filestatusDiv = document.getElementById("file_status");
+    filestatusDiv.innerHTML = '';
+
     var filelist = document.getElementById("file_input").files;
     var numOfFiles = filelist.length;
     counter = numOfFiles;
@@ -84,7 +86,14 @@ function convertToObjects(text, file) {
     if (answerLine.charAt(0).toLowerCase() !== 'x') {
         throw "Plik " + file.name + " ma niewłaściwy format!";
     }
-    var correctAnswer = (answerLine.indexOf('1') + 1);
+
+    var correctAnswers = [];
+
+    for (var j = 1; j < answerLine.length; j++) {
+        if (answerLine.charAt(j) === '1') {
+            correctAnswers.push(j + 1);
+        }
+    }
 
     var questionLine = lines[1];
 
@@ -93,7 +102,7 @@ function convertToObjects(text, file) {
         if (answerString === "") {
             continue;
         }
-        var correct = (i === correctAnswer);
+        var correct = ($.inArray(i, correctAnswers) !== -1);
         var answer = {"content": answerString, "correct": correct};
         answers.push(answer);
     }
