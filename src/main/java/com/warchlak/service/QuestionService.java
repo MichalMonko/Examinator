@@ -86,4 +86,11 @@ public class QuestionService implements QuestionServiceInterface
 	{
 		return questionDAO.saveQuestions(courseId, questions);
 	}
+	
+	@Override
+	@Transactional
+	public Course getCourseWithQuestions(int courseId)
+	{
+		return questionDAO.getCourseWithQuestions(courseId);
+	}
 }

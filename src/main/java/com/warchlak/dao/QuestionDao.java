@@ -111,5 +111,48 @@ public class QuestionDao implements QuestionDaoInterface
 		return course;
 	}
 	
+	@Override
+	public Course getCourseWithQuestions(int courseId)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		Course course = session.get(Course.class, courseId);
+		
+		if(course == null) {
+			throw new ResourceNotFoundException("Course with id: " + courseId + " doesn't exist");
+		}
+		Hibernate.initialize(course.getQuestions());
+		
+		return course;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

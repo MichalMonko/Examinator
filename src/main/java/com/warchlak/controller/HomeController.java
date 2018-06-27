@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletRequest;
@@ -125,4 +123,48 @@ public class HomeController
 		
 		return new ModelAndView("addQuestionForm", model);
 	}
+	
+	@GetMapping("/showQuestions")
+	public ModelAndView showQuestionListForCourse(@ModelAttribute("courseId") int courseId,
+	                                              ModelMap model)
+	{
+		Course course = questionService.getCourseWithQuestions(courseId);
+		model.addAttribute("course",course);
+		
+		return new ModelAndView("showQuestions", model);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
