@@ -33,14 +33,6 @@ public class HomeController
 	public String getCoursesList(Model model)
 	{
 		List<Major> majors = questionService.getMajors();
-		for (Major major : majors)
-		{
-			for (Course course : major.getCourses())
-			{
-				System.out.println(course.getName());
-			}
-		}
-		
 		model.addAttribute("majors", majors);
 		return "courseList";
 	}

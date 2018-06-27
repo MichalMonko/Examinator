@@ -6,7 +6,6 @@
 
 <head>
     <!-- Required meta tags -->
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -14,11 +13,45 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
           integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
           crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <title>Hello, world!</title>
 </head>
 
-<body>
+<body style="padding-top: 70px;">
+
+<nav class="navbar navbar-inverse navbar-expand-lg navbar-fixed-top">
+
+    <div class="container-fluid" style="display: inline-block">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Testowniki</a>
+        </div>
+
+        <ul class="nav navbar-nav">
+            <li><a href="/">Strona główna</a></li>
+            <li><a href="/showCoursesList">Przeglądaj kursy</a></li>
+        </ul>
+
+        <div class="nav navbar-nav">
+            <form action="/search" class="form-inline" method="post" style="padding-top: 8px">
+                <div class="input-group">
+                    <input type="text" class="form-control input-group" name="searchValue">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">Szukaj</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span>Załóż konto</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span>Zaloguj</a></li>
+        </ul>
+    </div>
+</nav>
+
 <div class="container">
     <div class="jumbotron bg-dark text-white">
         <h1 class="text-center">Testowniki</h1>
@@ -26,7 +59,8 @@
     <div class="row">
         <div class="col d-flex">
             <div class="card">
-                <img class="card-img-top" src="${pageContext.request.contextPath}/resources/icons/write_question.png" alt="write question icon">
+                <img class="card-img-top" src="${pageContext.request.contextPath}/resources/icons/write_question.png"
+                     alt="write question icon">
                 <div class="card-body">
                     <h4 class="card-title">Dodaj nowe pytanie</h4>
                     <p class="card-text">
@@ -38,7 +72,8 @@
         </div>
         <div class="col d-flex">
             <div class="card">
-                <img class="card-img-top" src="${pageContext.request.contextPath}/resources/icons/lookup_base_icon.png" alt="lookup database icon">
+                <img class="card-img-top" src="${pageContext.request.contextPath}/resources/icons/lookup_base_icon.png"
+                     alt="lookup database icon">
                 <div class="card-body">
                     <h4 class="card-title">Przeglądaj bazę</h4>
                     <p class="card-text">

@@ -1,10 +1,10 @@
 
-var nextName = 3;
+var nextId = 3;
 var counter = 'E'.charCodeAt(0);
 
 function appendAnotherAnswerField()
 {
-    nextName++;
+    nextId++;
     counter++;
 
     var formGroup = document.createElement('div');
@@ -24,19 +24,14 @@ function appendAnotherAnswerField()
     var inputGroup = document.createElement("div");
     inputGroup.setAttribute("class", "input-group");
 
-    var prependInputGroup = document.createElement("div");
-    prependInputGroup.setAttribute("class", "input-group-prepend");
-
-    var button = document.createElement("input");
-    button.setAttribute("class", "btn btn-danger");
-    button.setAttribute("name", nextName);
-    button.setAttribute("type", "button");
+    var button = document.createElement("span");
+    button.setAttribute("class", "input-group-addon btn btn-defalut");
+    button.setAttribute("id", nextId + "button");
+    button.setAttribute("style", "background-color: lightcoral;");
     button.setAttribute("onclick", "switchValues(this)");
 
-    prependInputGroup.appendChild(button);
-
     inputGroup.appendChild(answerField);
-    inputGroup.appendChild(prependInputGroup);
+    inputGroup.appendChild(button);
 
     var hiddenValues = document.getElementById("correctValues");
     var value = document.createElement("input");
@@ -59,17 +54,19 @@ function appendAnotherAnswerField()
 
 function switchValues(id)
 {
-    var currentClass = id.getAttribute("class");
-    if ((currentClass.match("success")) != null)
+    var currentClass = id.getAttribute("style");
+    if ((currentClass.match("green")) != null)
     {
-        id.setAttribute("class", "btn btn-danger");
+        // id.setAttribute("class", "btn btn-danger");
+        id.setAttribute("style","background-color: lightcoral;");
     }
     else
     {
-        id.setAttribute("class", "btn btn-success");
+        // id.setAttribute("class", "btn btn-success");
+        id.setAttribute("style","background-color: lightgreen;");
     }
 
-    var inputIndex = Number(id.name);
+    var inputIndex = Number(id.id.toString().charAt(0));
     var hiddenDiv = document.getElementById("correctValues");
     var hiddenInputs = hiddenDiv.getElementsByTagName("input");
 
