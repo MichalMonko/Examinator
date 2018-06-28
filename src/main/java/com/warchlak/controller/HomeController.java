@@ -5,6 +5,7 @@ import com.warchlak.entity.Answer;
 import com.warchlak.entity.Course;
 import com.warchlak.entity.Major;
 import com.warchlak.entity.Question;
+import com.warchlak.service.QuestionService;
 import com.warchlak.service.QuestionServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,12 +17,18 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.ServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController
 {
+	private final QuestionServiceInterface questionService;
+	
 	@Autowired
-	private QuestionServiceInterface questionService;
+	public HomeController(QuestionServiceInterface questionService)
+	{
+		this.questionService = questionService;
+	}
 	
 	@RequestMapping(value = "/")
 	public String getHomePage()
@@ -30,18 +37,33 @@ public class HomeController
 	}
 	
 	@RequestMapping(value = "/showCoursesList")
-	public String getCoursesList(Model model)
+	public String getCoursesList(Model model, @RequestParam(value = "searchName" ,required = false) String searchName)
 	{
 		List<Major> majors = questionService.getMajors();
-		model.addAttribute("majors", majors);
+		
+		if (searchName != null)
+		{
+			model.addAttribute("majors", filterCourses(majors, searchName));
+		}
+		else
+		{
+			model.addAttribute("majors", majors);
+		}
 		return "courseList";
 	}
 	
 	@RequestMapping(value = "/showAddQuestionForm")
 	public ModelAndView showAddQuestionForm(ModelMap model, @ModelAttribute("courseId") int courseId,
+	                                        @RequestParam(value = "questionId", defaultValue = "-1") int questionId,
 	                                        @ModelAttribute("question") Question question)
 	{
 		Course course = questionService.getCourse(courseId);
+		
+		if (questionId != -1)
+		{
+			question = questionService.getQuestion(questionId);
+			model.addAttribute("question", question);
+		}
 		
 		model.addAttribute("course", course);
 		model.addAttribute("courseId", courseId);
@@ -62,6 +84,8 @@ public class HomeController
 	
 	@PostMapping(value = "/addQuestion")
 	public ModelAndView addQuestion(ModelMap model, @ModelAttribute("question") Question question,
+	                                @RequestParam(value = "answer") String[] answerRequestItem,
+	                                @RequestParam(value = "correct") String[] isCorrectItems,
 	                                ServletRequest request)
 	{
 		boolean success = true;
@@ -72,18 +96,16 @@ public class HomeController
 		{
 			success = false;
 		}
-		else if (request.getParameterValues("answer") != null)
+		else if (answerRequestItem != null)
 		{
-			String[] answersContent = request.getParameterValues("answer");
-			String[] isCorrect = request.getParameterValues("correct");
 			List<Answer> answers = new ArrayList<>();
 			
 			int counter = 0;
 			boolean correct = false;
 			
-			for (String answerString : answersContent)
+			for (String answerString : answerRequestItem)
 			{
-				correct = (isCorrect[counter].equals("1"));
+				correct = (isCorrectItems[counter].equals("1"));
 				
 				Answer answer = new Answer();
 				answer.setContent(answerString);
@@ -121,42 +143,22 @@ public class HomeController
 	                                              ModelMap model)
 	{
 		Course course = questionService.getCourseWithQuestions(courseId);
-		model.addAttribute("course",course);
+		model.addAttribute("course", course);
 		
 		return new ModelAndView("showQuestions", model);
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	private List<Major> filterCourses(List<Major> majors, String name)
+	{
+		for (Major major : majors)
+		{
+			major.getCourses().removeIf(course -> !course.getName().contains(name));
+		}
+		
+		majors.removeIf(major -> major.getCourses().isEmpty());
+		
+		return majors;
+	}
 	
 	
 }

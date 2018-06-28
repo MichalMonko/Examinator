@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: fff
@@ -38,14 +39,14 @@
         </ul>
 
         <div class="nav navbar-nav">
-            <form action="/search" class="form-inline" method="post" style="padding-top: 8px">
+            <form:form action="/showCoursesList" class="form-inline" method="post" style="padding-top: 8px">
                 <div class="input-group">
-                    <input type="text" class="form-control input-group" name="searchValue">
+                    <input name="searchName" type="text" class="form-control input-group">
                     <div class="input-group-append">
-                        <button type="submit" class="btn btn-default">Szukaj</button>
+                        <input type="submit" class="btn btn-default">Szukaj
                     </div>
                 </div>
-            </form>
+            </form:form>
         </div>
 
         <ul class="nav navbar-nav navbar-right">
