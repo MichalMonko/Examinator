@@ -1,5 +1,6 @@
-package com.warchlak.config;
+package com.warchlak.config.mvc;
 
+import com.warchlak.config.security.WebSecurityConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class SpringMvcDispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer
@@ -7,7 +8,7 @@ public class SpringMvcDispatcherServletInitializer extends AbstractAnnotationCon
 	@Override
 	protected Class<?>[] getRootConfigClasses()
 	{
-		return new Class[0];
+		return new Class[] {WebSecurityConfig.class};
 	}
 	
 	@Override
