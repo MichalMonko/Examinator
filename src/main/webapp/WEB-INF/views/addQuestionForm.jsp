@@ -83,7 +83,7 @@
                 </c:otherwise>
             </c:choose>
 
-            <form:form id="question_add_form" action="/addQuestion" method="post" modelAttribute="question">
+            <form:form id="question_add_form" action="question/add" method="post" modelAttribute="question">
 
                 <input type="hidden" name="courseId" value="${courseId}">
 

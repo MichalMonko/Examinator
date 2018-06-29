@@ -78,10 +78,10 @@
                 <div id="${major.id}" class="collapse">
                     <c:forEach var="course" items="${major.courses}">
 
-                        <c:url var="addQuestionForm" value="/showAddQuestionForm">
+                        <c:url var="addQuestionForm" value="/question/showAddForm">
                             <c:param name="courseId" value="${course.id}"/>
                         </c:url>
-                        <c:url var="addQuestionFiles" value="/showAddQuestionFiles">
+                        <c:url var="addQuestionFiles" value="/question/showAddFiles">
                             <c:param name="courseId" value="${course.id}"/>
                         </c:url>
                         <c:url var="showQuestions" value="/showQuestions">

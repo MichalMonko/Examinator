@@ -82,7 +82,7 @@
         <div class="col-lg-8">
             <div class="btn btn-primary btn-lg" onclick="sendFiles();">Dodaj pliki</div>
             <div class="float-right">
-                <a href="showCoursesList" class="btn btn-info">
+                <a href="/showCoursesList" class="btn btn-info">
                     <span class="glyphicon glyphicon-arrow-left"></span> Powrót do listy
                 </a>
             </div>
