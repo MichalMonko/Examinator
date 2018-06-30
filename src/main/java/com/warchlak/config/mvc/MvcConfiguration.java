@@ -94,6 +94,7 @@ public class MvcConfiguration implements WebMvcConfigurer
 	}
 	
 	@Bean
+	@Primary
 	public LocalSessionFactoryBean getSessionFactory(DataSource dataSource)
 	{
 		dataSource = getDataSource();
@@ -107,6 +108,7 @@ public class MvcConfiguration implements WebMvcConfigurer
 	}
 	
 	@Bean
+	@Primary
 	@Autowired
 	public HibernateTransactionManager getHibernateTransactionManager(SessionFactory sessionFactory)
 	{

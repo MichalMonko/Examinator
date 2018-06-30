@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 @ComponentScan(basePackages = "com.warchlak")
 @EnableTransactionManagement
 @EnableWebMvc
-@PropertySource("classpath: AuthenticationDataSourceProperties.prop")
+@PropertySource("classpath:AuthenticationDataSourceProperties.prop")
 public class AuthenticationDataSourceConfig
 {
 	private final static Logger LOGGER = Logger.getLogger(AuthenticationDataSourceConfig.class.getName());
@@ -96,19 +96,3 @@ public class AuthenticationDataSourceConfig
 	}
 	
 }
-//#connectionProperties
-//		minConnectionPool=5
-//		maxConnectionPool=20
-//		defaultConnectionPool=5
-//		maxIdleTime=5000
-//
-//		#JDBC Properties
-//		jdbc_driverClass=com.mysql.jdbc.Driver
-//		jdbc_url=jdbc:mysql://localhost:3306/user_storage?useSSL=false
-//		jdbc_username=root
-//		jdbc_password=root
-//
-//		#Hibernate Properties
-//		hibernate_dialect_class=org.hibernate.dialect.MySQLDialect
-//		hibernate_showSQL=true
-//		hibernate_packagesToScan=com.warchlak.entity
