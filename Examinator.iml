@@ -5,6 +5,7 @@
       <configuration>
         <datasource-map>
           <unit-entry name="getSessionFactory" value="b658c5b6-aa98-4177-badc-905e80be8374" />
+          <unit-entry name="userSessionFactory" />
         </datasource-map>
         <naming-strategy-map />
       </configuration>

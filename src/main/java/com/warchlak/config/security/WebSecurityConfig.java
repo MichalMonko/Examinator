@@ -1,25 +1,29 @@
 package com.warchlak.config.security;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import javax.sql.DataSource;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 {
-	@Bean
-	UserDetailsService getUserDetailService()
+	
+	private final DataSource userDataSource;
+	
+	@Autowired
+	public WebSecurityConfig( DataSource userDataSource)
 	{
-		InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-		manager.createUser(User.withDefaultPasswordEncoder().username("admin").password("admin").roles("USER").build());
-		
-		return manager;
+		this.userDataSource = userDataSource;
+	}
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception
+	{
+		auth.jdbcAuthentication().dataSource(userDataSource);
 	}
 	
 	@Override

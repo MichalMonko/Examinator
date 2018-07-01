@@ -52,9 +52,7 @@ public class MvcConfiguration implements WebMvcConfigurer
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 	
-	@Bean
-	@Primary
-	public ComboPooledDataSource getDataSource()
+	private ComboPooledDataSource getDataSource()
 	{
 		
 		ComboPooledDataSource dataSource = new ComboPooledDataSource();
@@ -93,8 +91,8 @@ public class MvcConfiguration implements WebMvcConfigurer
 		return properties;
 	}
 	
-	@Bean
 	@Primary
+	@Bean
 	public LocalSessionFactoryBean getSessionFactory(DataSource dataSource)
 	{
 		dataSource = getDataSource();
@@ -107,8 +105,8 @@ public class MvcConfiguration implements WebMvcConfigurer
 		return sessionFactory;
 	}
 	
-	@Bean
 	@Primary
+	@Bean
 	@Autowired
 	public HibernateTransactionManager getHibernateTransactionManager(SessionFactory sessionFactory)
 	{
