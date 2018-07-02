@@ -85,6 +85,7 @@
                         <c:url var="addQuestionFiles" value="/question/showAddFiles">
                             <c:param name="courseId" value="${course.id}"/>
                         </c:url>
+
                         <c:url var="showQuestions" value="/showQuestions">
                             <c:param name="courseId" value="${course.id}"/>
                         </c:url>
@@ -93,12 +94,16 @@
                             <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
                                data-toggle="dropdown">${course.name}<span class="caret"></span></a>
                             <ul class="dropdown-menu">
+
+                                <sec:authorize access="hasAnyRole('ADMIN','CONTRIBUTOR')">
                                 <li>
                                     <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
                                        href="${addQuestionForm}">Dodaj pytanie (formularz)</a>
                                 <li>
                                     <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
                                        href="${addQuestionFiles}">Dodaj pytanie (Z plików)</a>
+                                    </sec:authorize>
+
                                 <li>
                                     <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
                                        href="${showQuestions}">Wyświetl pytania</a>
