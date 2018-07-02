@@ -30,6 +30,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 	protected void configure(HttpSecurity http) throws Exception
 	{
 		http.authorizeRequests()
+		    .antMatchers("/resources/**").permitAll()
+		    .antMatchers("/*").permitAll()
+		    .antMatchers("/question/**").access("hasRole('ADMIN') or hasRole('CONTRIBUTOR')")
 		    .anyRequest()
 		    .authenticated()
 		    .and()
@@ -37,6 +40,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 		    .loginPage("/authentication/login")
 		    .permitAll()
 		    .and()
-		    .httpBasic();
+		    .httpBasic()
+		    .and()
+		    .exceptionHandling()
+		    .accessDeniedPage("/authentication/denied")
+		    .and()
+		    .logout()
+		    .logoutSuccessUrl("/authentication/logout");
 	}
 }

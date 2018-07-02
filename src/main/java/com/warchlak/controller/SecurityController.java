@@ -12,4 +12,16 @@ public class SecurityController
 	{
 		return "loginPage";
 	}
+	
+	@RequestMapping("/denied")
+	public String showDeniedPage()
+	{
+		return "accessDeniedPage";
+	}
+	
+	@RequestMapping("/logout")
+	public String logout()
+	{
+		return "logoutPage";
+	}
 }
