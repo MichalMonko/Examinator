@@ -19,7 +19,7 @@ public class SecurityController
 		return "accessDeniedPage";
 	}
 	
-	@RequestMapping("/logout")
+	@RequestMapping("/logoutSuccess")
 	public String logout()
 	{
 		return "logoutPage";

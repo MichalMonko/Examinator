@@ -15,7 +15,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 	private final DataSource userDataSource;
 	
 	@Autowired
-	public WebSecurityConfig( DataSource userDataSource)
+	public WebSecurityConfig(DataSource userDataSource)
 	{
 		this.userDataSource = userDataSource;
 	}
@@ -46,6 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 		    .accessDeniedPage("/authentication/denied")
 		    .and()
 		    .logout()
-		    .logoutSuccessUrl("/authentication/logout");
+		    .logoutSuccessUrl("/authentication/logoutSuccess")
+		    .permitAll();
 	}
 }

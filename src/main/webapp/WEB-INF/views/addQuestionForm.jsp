@@ -1,6 +1,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: fff
@@ -25,13 +26,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <title>Hello, world!</title>
 
+    <title>Hello, world!</title>
+    <script type="text/javascript" src="/resources/javascript/logoutHandler.js"></script>
     <script type="text/javascript" src="/resources/javascript/addQuestion.js"></script>
 
 </head>
 
 <body class="bg-dark" style="padding-top: 70px;">
+
+<security:authorize access="isAuthenticated()" var="loggedIn"/>
+<form:form id="logout_form" method="post" action="/logout"/>
 
 <nav class="navbar navbar-inverse navbar-expand-lg navbar-fixed-top">
     <div class="container-fluid" style="display: inline-block">
@@ -57,7 +62,14 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li><a href="#"><span class="glyphicon glyphicon-user"></span>Załóż konto</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span>Zaloguj</a></li>
+            <c:choose>
+                <c:when test="${loggedIn == true}">
+                    <li><a href="#" id="logoutLink" onclick="logout()"><span class="glyphicon glyphicon-log-in"></span>Wyloguj</a></li>
+                </c:when>
+                <c:otherwise>
+                    <li><a href="/authentication/login"><span class="glyphicon glyphicon-log-in"></span>Zaloguj</a></li>
+                </c:otherwise>
+            </c:choose>
         </ul>
     </div>
 </nav>
