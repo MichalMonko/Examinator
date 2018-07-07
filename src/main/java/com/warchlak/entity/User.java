@@ -8,10 +8,6 @@ import java.util.List;
 public class User
 {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
-	
 	@Column(name = "username")
 	private String username;
 	
@@ -21,21 +17,14 @@ public class User
 	@Column(name = "email")
 	private String email;
 	
+	@Column(name = "enabled")
+	private boolean enabled = true;
+	
 	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE,
 	CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinTable(name = "authorities" ,joinColumns = @JoinColumn(name = "username"),
 			inverseJoinColumns = @JoinColumn(name = "authority"))
 	private List<Role> roles;
-	
-	public int getId()
-	{
-		return id;
-	}
-	
-	public void setId(int id)
-	{
-		this.id = id;
-	}
 	
 	public String getUsername()
 	{
@@ -75,5 +64,15 @@ public class User
 	public void setRoles(List<Role> roles)
 	{
 		this.roles = roles;
+	}
+	
+	public boolean isEnabled()
+	{
+		return enabled;
+	}
+	
+	public void setEnabled(boolean enabled)
+	{
+		this.enabled = enabled;
 	}
 }

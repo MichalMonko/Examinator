@@ -4,12 +4,14 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -17,7 +19,6 @@ import java.util.logging.Logger;
 
 @Configuration
 @ComponentScan(basePackages = "com.warchlak")
-@EnableWebMvc
 @EnableTransactionManagement
 @PropertySource("classpath:AuthenticationDataSourceProperties.prop")
 public class AuthenticationDataSourceConfig
@@ -32,7 +33,7 @@ public class AuthenticationDataSourceConfig
 		this.environment = environment;
 	}
 	
-	@Bean
+	@Bean("userDataSource")
 	public DataSource getDataSource()
 	{
 		ComboPooledDataSource userDataSource = new ComboPooledDataSource();
@@ -48,8 +49,6 @@ public class AuthenticationDataSourceConfig
 			userDataSource.setMinPoolSize(Integer.parseInt(environment.getProperty("minConnectionPool")));
 			userDataSource.setInitialPoolSize(Integer.parseInt(environment.getProperty("defaultConnectionPool")));
 			userDataSource.setMaxIdleTime(Integer.parseInt(environment.getProperty("maxIdleTime")));
-			
-			LOGGER.info("Hello, i am here!");
 			
 		} catch (Exception e)
 		{
@@ -82,7 +81,7 @@ public class AuthenticationDataSourceConfig
 	
 	@Bean("userSessionFactory")
 	@Autowired
-	public LocalSessionFactoryBean getSessionFactory(DataSource dataSource)
+	public LocalSessionFactoryBean getSessionFactory(@Qualifier("userDataSource") DataSource dataSource)
 	{
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		

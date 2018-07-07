@@ -4,6 +4,7 @@ import com.warchlak.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -12,38 +13,19 @@ import javax.annotation.Resource;
 public class UserDao implements UserDaoInterface
 {
 	@Resource(name = "userSessionFactory")
-	private SessionFactory sessionFactory;
+	private final SessionFactory sessionFactory;
 	
-	@Override
-	public int getUser(int userId)
+	@Autowired
+	public UserDao(SessionFactory sessionFactory)
 	{
-		User user;
-		Session session = sessionFactory.getCurrentSession();
-		user = session.get(User.class, userId);
-		
-		if (user != null)
-		{
-			return user.getId();
-		}
-		else
-		{
-			return -1;
-		}
+		this.sessionFactory = sessionFactory;
 	}
 	
 	@Override
-	public int saveUser(User user)
+	public void saveUser(User user)
 	{
 		Session session = sessionFactory.getCurrentSession();
 		session.saveOrUpdate(user);
-		
-		return getUser(user.getId());
-	}
-	
-	@Override
-	public int removeUser(int userId)
-	{
-		return -1;
 	}
 	
 	@Override
@@ -51,10 +33,17 @@ public class UserDao implements UserDaoInterface
 	{
 		Session session = sessionFactory.getCurrentSession();
 		Query<User> query =
-				session.createQuery("FROM User WHERE User.email=:email", User.class)
+				session.createQuery("FROM User WHERE email=:email", User.class)
 				       .setParameter("email", email);
 		
-		return query.getSingleResult();
+		if (query.getResultList().isEmpty())
+		{
+			return null;
+		}
+		else
+		{
+			return query.getResultList().get(0);
+		}
 	}
 	
 	@Override
@@ -62,9 +51,16 @@ public class UserDao implements UserDaoInterface
 	{
 		Session session = sessionFactory.getCurrentSession();
 		Query<User> query =
-				session.createQuery("FROM User WHERE User.username=:username", User.class)
-				       .setParameter("username", username);
+				session.createQuery("FROM User WHERE username=:username", User.class);
+		query.setParameter("username", username);
 		
-		return query.getSingleResult();
+		if (query.getResultList().isEmpty())
+		{
+			return null;
+		}
+		else
+		{
+			return query.getResultList().get(0);
+		}
 	}
 }

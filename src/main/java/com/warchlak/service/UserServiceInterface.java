@@ -5,9 +5,7 @@ import com.warchlak.entity.User;
 
 public interface UserServiceInterface
 {
-	int saveUser(UserDTO userDTO);
-	
-	User getUser(int UserId);
+	void saveUser(UserDTO userDTO);
 	
 	User getUserByEmail(String email);
 	

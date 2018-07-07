@@ -19,7 +19,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
-<body>
+<body style="padding-top: 100px">
 <nav class="navbar navbar-inverse navbar-expand-lg navbar-fixed-top">
 
     <div class="container-fluid" style="display: inline-block">
@@ -59,13 +59,14 @@
 </nav>
 
 <form:form action="/authentication/registerUser" method="post" modelAttribute="userDTO">
-    <label>Nazwa użytkownika:</label><form:input path="username"/>
+    <label>${error}</label>
+    <label>Nazwa użytkownika:</label><form:input type="text" path="username"/>
     <br>
     <label>Email studencki:</label><form:input path="email"/>
     <br>
-    <label>Hasło:</label><form:input path="password"/>
+    <label>Hasło:</label><form:password path="password"/>
     <br>
-    <label>Potwierdź hasło:</label><form:input path="confirmedPassword"/>
+    <label>Potwierdź hasło:</label><form:password path="confirmedPassword"/>
     <br>
     <input type="submit" value="Zarejestruj">
 </form:form>

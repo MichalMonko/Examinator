@@ -53,7 +53,7 @@
         </div>
 
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span>Załóż konto</a></li>
+            <li><a href="/authentication/signUp"><span class="glyphicon glyphicon-user"></span>Załóż konto</a></li>
             <c:choose>
                 <c:when test="${loggedIn == true}">
                         <li><a id="logoutLink" href="#" onclick="logout()"><span class="glyphicon glyphicon-log-in"></span>Wyloguj</a></li>

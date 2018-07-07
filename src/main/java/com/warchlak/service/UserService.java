@@ -4,7 +4,9 @@ import com.warchlak.DTO.UserDTO;
 import com.warchlak.dao.UserDaoInterface;
 import com.warchlak.entity.User;
 import com.warchlak.factory.UserFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -12,42 +14,41 @@ import javax.annotation.Resource;
 public class UserService implements UserServiceInterface
 {
 	@Resource(name = "userDAO")
-	private UserDaoInterface userDao;
+	private final UserDaoInterface userDao;
+	
+	@Autowired
+	public UserService(UserDaoInterface userDao)
+	{
+		this.userDao = userDao;
+	}
 	
 	@Override
-	public int saveUser(UserDTO userDTO)
+	@Transactional("userTransactionManager")
+	public void saveUser(UserDTO userDTO)
 	{
-		
 		if (!checkIfUserExists(userDTO))
 		{
 			User newUser = UserFactory.createUser(userDTO);
-			
-			return userDao.saveUser(newUser);
+			userDao.saveUser(newUser);
 		}
 		else
 		{
-			return -1;
+			throw new RuntimeException("User already exists");
 		}
-		
-		
 	}
 	
-	@Override
-	public User getUser(int UserId)
-	{
-		return null;
-	}
-	
+	@Transactional("userTransactionManager")
 	@Override
 	public User getUserByEmail(String email)
 	{
-		return null;
+		return userDao.getUserByEmail(email);
 	}
 	
+	@Transactional("userTransactionManager")
 	@Override
 	public User getUserByUsername(String username)
 	{
-		return null;
+		return userDao.getUserByUsername(username);
 	}
 	
 	private boolean checkIfUserExists(UserDTO userDTO)
