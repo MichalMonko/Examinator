@@ -19,7 +19,7 @@
                 <div class="input-group">
                     <input name="searchName" type="text" class="form-control input-group">
                     <div class="input-group-append">
-                        <input type="submit" class="btn btn-default">Szukaj
+                        <input type="submit" class="btn btn-default" value="Szukaj">
                     </div>
                 </div>
             </form:form>
