@@ -1,6 +1,7 @@
 package com.warchlak.controller;
 
 import com.warchlak.DTO.UserDTO;
+import com.warchlak.exceptionHandling.UserAlreadyExistsException;
 import com.warchlak.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -55,16 +56,27 @@ public class SecurityController
 	{
 		if(bindingResult.hasErrors())
 		{
-			request.setAttribute("error", "Form has errors");
 			return "signupPage";
 		}
 		if(!userDTO.getPassword().equals(userDTO.getConfirmedPassword()))
 		{
-			request.setAttribute("error", "Password doesn't match");
+			request.setAttribute("error", "Hasła nie są identyczne!");
 			return "signupPage";
 		}
 		
-		userService.saveUser(userDTO);
+		try
+		{
+			userService.saveUser(userDTO);
+			request.setAttribute("success", "Użytkownik został zarejestrowany");
+		}
+		catch(UserAlreadyExistsException e)
+		{
+			request.setAttribute("error", "Użytkownik o podanym adresie email lub loginie już istnieje.");
+		}
+		catch (Exception e)
+		{
+			request.setAttribute("error", "Wystąpił błąd przy dodawania użytkownika, spróbuj ponownie później.");
+		}
 		
 		return "signupPage";
 		

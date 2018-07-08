@@ -1,5 +1,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: fff
@@ -19,7 +20,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
-<body style="padding-top: 100px">
+<body style="padding-top: 100px" class="bg-dark">
 <nav class="navbar navbar-inverse navbar-expand-lg navbar-fixed-top">
 
     <div class="container-fluid" style="display: inline-block">
@@ -44,10 +45,10 @@
         </div>
 
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span>Załóż konto</a></li>
+            <li><a href="/authentication/signUp"><span class="glyphicon glyphicon-user"></span>Załóż konto</a></li>
             <c:choose>
                 <c:when test="${loggedIn == true}">
-                    <li><a id="logoutLink" href="#" onclick="logout()"><span class="glyphicon glyphicon-log-in"></span>Wyloguj</a>
+                    <li><a id="logoutLink" href="/logout" onclick="logout()"><span class="glyphicon glyphicon-log-in"></span>Wyloguj</a>
                     </li>
                 </c:when>
                 <c:otherwise>
@@ -58,18 +59,137 @@
     </div>
 </nav>
 
-<form:form action="/authentication/registerUser" method="post" modelAttribute="userDTO">
-    <label>${error}</label>
-    <label>Nazwa użytkownika:</label><form:input type="text" path="username"/>
-    <br>
-    <label>Email studencki:</label><form:input path="email"/>
-    <br>
-    <label>Hasło:</label><form:password path="password"/>
-    <br>
-    <label>Potwierdź hasło:</label><form:password path="confirmedPassword"/>
-    <br>
-    <input type="submit" value="Zarejestruj">
+<div class="text-white">
+
+    <form:form action="/authentication/registerUser" method="post" modelAttribute="userDTO">
+
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <c:if test="${error != null}">
+                <div class="alert alert-danger">
+                    <strong>Błąd formularza! </strong>
+                        ${error}
+                </div>
+            </c:if>
+
+            <c:if test="${success != null}">
+                <div class="alert alert-success">
+                    <strong>Sukces! </strong>
+                        ${success}
+                </div>
+            </c:if>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+
+            <label for="usernameField">Nazwa użytkownika:</label>
+            <form:input id="usernameField" type="text"
+                        class="form-control" path="username"/>
+
+            <spring:bind path="username">
+                <c:if test="${status.error}">
+                    <div class="alert alert-danger">
+                        <form:errors path="username"/>
+                    </div>
+                </c:if>
+            </spring:bind>
+            <br>
+
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+
+            <label for="passwordField">Hasło:</label>
+            <form:password id="passwordField"
+                           class="form-control" path="password"/>
+            <spring:bind path="password">
+                <c:if test="${status.error}">
+                    <div class="alert alert-danger">
+                        <form:errors path="password"/>
+                    </div>
+                </c:if>
+            </spring:bind>
+            <br>
+
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+
+            <label for="confirmPasswordField">Potwierdź hasło:</label>
+            <form:password id="confirmPasswordField"
+                           class="form-control" path="confirmedPassword"/>
+            <spring:bind path="confirmedPassword">
+                <c:if test="${status.error}">
+                    <div class="alert alert-danger">
+                        <form:errors path="confirmedPassword"/>
+                    </div>
+                </c:if>
+            </spring:bind>
+            <br>
+
+        </div>
+
+        <div class="col-sm-4"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+
+            <label for="emailField">Email studencki:</label>
+            <form:input id="emailField" type="email"
+                           class="form-control" path="email"/>
+            <spring:bind path="email">
+                <c:if test="${status.error}">
+                    <div class="alert alert-danger">
+                        <form:errors path="email"/>
+                    </div>
+                </c:if>
+            </spring:bind>
+            <br>
+
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <input type="submit" class="btn btn-primary btn-block" value="Zarejestruj">
+        </div>
+
+    </div>
+    <div class="col-sm-4"></div>
+</div>
 </form:form>
+
+
+
+<div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+        <div class="float-right">
+            <br>
+            <br>
+            <a href="/" class="btn btn-info">
+                <span class="glyphicon glyphicon-arrow-left"></span> Powrót do strony głównej
+            </a>
+        </div>
+    </div>
+</div>
+<div class="col-sm-3"></div>
 
 </body>
 

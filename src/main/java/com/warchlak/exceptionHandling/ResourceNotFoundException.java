@@ -1,4 +1,4 @@
-package com.warchlak.rest.exceptionHandling;
+package com.warchlak.exceptionHandling;
 
 public class ResourceNotFoundException extends RuntimeException
 {

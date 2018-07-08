@@ -2,30 +2,26 @@ package com.warchlak.DTO;
 
 import com.sun.istack.internal.NotNull;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserDTO
 {
 	@NotNull
-	@Size(min = 2,max = 30)
-	@NotBlank
+	@Size(min = 2, max = 30, message = "Pole musi mieć minimalnie 2 znaki a maksymalnie 30 znaków.")
 	private String username;
 	
 	@NotNull
-	@NotBlank
-	@Pattern(regexp = "[1-9]{6}@student\\.pwr\\.edu\\.pl")
+	@Pattern(regexp = "[1-9]{6}@student\\.pwr\\.edu\\.pl",
+			message = "Email musi być w formacie numer_indeksu@student.pwr.edu.pl.")
 	private String email;
 	
-	@NotBlank
 	@NotNull
-	@Size(min = 2,max = 30)
+	@Size(min = 2, max = 30, message = "Pole musi mieć minimalnie 2 znaki a maksymalnie 30 znaków.")
 	private String password;
 	
-	@NotBlank
 	@NotNull
-	@Size(min = 2,max = 30)
+	@Size(min = 2, max = 30, message = "Pole musi mieć minimalnie 2 znaki a maksymalnie 30 znaków.")
 	private String confirmedPassword;
 	
 	public String getUsername()

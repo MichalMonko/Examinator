@@ -3,19 +3,16 @@ package com.warchlak.rest.controller;
 import com.warchlak.entity.Course;
 import com.warchlak.entity.Major;
 import com.warchlak.entity.Question;
-import com.warchlak.rest.exceptionHandling.BindingErrorException;
-import com.warchlak.rest.exceptionHandling.ResourceNotFoundException;
+import com.warchlak.exceptionHandling.BindingErrorException;
+import com.warchlak.exceptionHandling.ResourceNotFoundException;
 import com.warchlak.service.QuestionServiceInterface;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletRequest;
 import java.util.List;
-import java.util.zip.DataFormatException;
 
 @RestController
 @RequestMapping("/api")

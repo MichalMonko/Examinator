@@ -3,6 +3,7 @@ package com.warchlak.service;
 import com.warchlak.DTO.UserDTO;
 import com.warchlak.dao.UserDaoInterface;
 import com.warchlak.entity.User;
+import com.warchlak.exceptionHandling.UserAlreadyExistsException;
 import com.warchlak.factory.UserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class UserService implements UserServiceInterface
 		}
 		else
 		{
-			throw new RuntimeException("User already exists");
+			throw new UserAlreadyExistsException("Użytkownik a danym loginie lub adresie email już istnieje, wprowadź inne dane.");
 		}
 	}
 	
