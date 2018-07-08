@@ -38,41 +38,7 @@
 <security:authorize access="isAuthenticated()" var="loggedIn"/>
 <form:form id="logout_form" method="post" action="/logout"/>
 
-<nav class="navbar navbar-inverse navbar-expand-lg navbar-fixed-top">
-    <div class="container-fluid" style="display: inline-block">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">Testowniki</a>
-        </div>
-
-        <ul class="nav navbar-nav">
-            <li><a href="/">Strona główna</a></li>
-            <li><a href="/showCoursesList">Przeglądaj kursy</a></li>
-        </ul>
-
-        <div class="nav navbar-nav">
-            <form:form action="/showCoursesList" class="form-inline" method="post" style="padding-top: 8px">
-                <div class="input-group">
-                    <input name="searchName" type="text" class="form-control input-group">
-                    <div class="input-group-append">
-                        <input type="submit" class="btn btn-default">Szukaj
-                    </div>
-                </div>
-            </form:form>
-        </div>
-
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span>Załóż konto</a></li>
-            <c:choose>
-                <c:when test="${loggedIn == true}">
-                    <li><a href="#" id="logoutLink" onclick="logout()"><span class="glyphicon glyphicon-log-in"></span>Wyloguj</a></li>
-                </c:when>
-                <c:otherwise>
-                    <li><a href="/authentication/login"><span class="glyphicon glyphicon-log-in"></span>Zaloguj</a></li>
-                </c:otherwise>
-            </c:choose>
-        </ul>
-    </div>
-</nav>
+<%@include file="navbar.jsp"%>
 
 
 <div class="container-fluid bg-dark text-white">
