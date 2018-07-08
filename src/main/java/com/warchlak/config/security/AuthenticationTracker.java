@@ -11,4 +11,10 @@ public class AuthenticationTracker
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
 	}
+	
+	public static String getLoggedUsername()
+	{
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return authentication.getName();
+	}
 }
