@@ -14,3 +14,4 @@ jdbc_password=root
 hibernate_dialect_class=org.hibernate.dialect.MySQLDialect
 hibernate_showSQL=true
 hibernate_packagesToScan=com.warchlak.entity
+hibernate_timeZone=UTC

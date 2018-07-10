@@ -3,6 +3,7 @@ package com.warchlak.service;
 import com.warchlak.DTO.UserDTO;
 import com.warchlak.dao.UserDaoInterface;
 import com.warchlak.entity.User;
+import com.warchlak.entity.ValidationToken;
 import com.warchlak.exceptionHandling.UserAlreadyExistsException;
 import com.warchlak.factory.UserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
 @Service
+@Transactional("userTransactionManager")
 public class UserService implements UserServiceInterface
 {
 	@Resource(name = "userDAO")
@@ -24,13 +26,13 @@ public class UserService implements UserServiceInterface
 	}
 	
 	@Override
-	@Transactional("userTransactionManager")
-	public void saveUser(UserDTO userDTO)
+	public User saveUser(UserDTO userDTO)
 	{
 		if (!checkIfUserExists(userDTO))
 		{
 			User newUser = UserFactory.createUser(userDTO);
 			userDao.saveUser(newUser);
+			return newUser;
 		}
 		else
 		{
@@ -38,14 +40,12 @@ public class UserService implements UserServiceInterface
 		}
 	}
 	
-	@Transactional("userTransactionManager")
 	@Override
 	public User getUserByEmail(String email)
 	{
 		return userDao.getUserByEmail(email);
 	}
 	
-	@Transactional("userTransactionManager")
 	@Override
 	public User getUserByUsername(String username)
 	{
@@ -66,5 +66,26 @@ public class UserService implements UserServiceInterface
 		{
 			return (getUserByEmail(email) != null);
 		}
+	}
+	
+	@Override
+	public ValidationToken createValidationToken(User user, String token)
+	{
+		ValidationToken validationToken = new ValidationToken(token, user);
+		userDao.saveToken(validationToken);
+		
+		return validationToken;
+	}
+	
+	@Override
+	public ValidationToken getValidationToken(String token)
+	{
+		return userDao.getValidationToken(token);
+	}
+	
+	@Override
+	public void updateUser(User user)
+	{
+		userDao.saveUser(user);
 	}
 }

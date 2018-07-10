@@ -1,6 +1,7 @@
 package com.warchlak.dao;
 
 import com.warchlak.entity.User;
+import com.warchlak.entity.ValidationToken;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -26,6 +27,13 @@ public class UserDao implements UserDaoInterface
 	{
 		Session session = sessionFactory.getCurrentSession();
 		session.saveOrUpdate(user);
+	}
+	
+	@Override
+	public void saveToken(ValidationToken validationToken)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.saveOrUpdate(validationToken);
 	}
 	
 	@Override
@@ -63,4 +71,24 @@ public class UserDao implements UserDaoInterface
 			return query.getResultList().get(0);
 		}
 	}
+	
+	@Override
+	public ValidationToken getValidationToken(String token)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		Query<ValidationToken> query = session.createQuery("FROM ValidationToken where token=:token", ValidationToken.class);
+		query.setParameter("token" ,token);
+		
+		if(query.getResultList().isEmpty())
+		{
+			return null;
+		}
+		else
+		{
+			return query.getResultList().get(0);
+		}
+		
+	}
+	
+	
 }

@@ -7,6 +7,7 @@ import java.util.List;
 @Table(name = "users")
 public class User
 {
+	
 	@Id
 	@Column(name = "username")
 	private String username;
@@ -18,7 +19,7 @@ public class User
 	private String email;
 	
 	@Column(name = "enabled")
-	private boolean enabled = true;
+	private boolean enabled = false;
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE,
 	CascadeType.PERSIST, CascadeType.REFRESH})

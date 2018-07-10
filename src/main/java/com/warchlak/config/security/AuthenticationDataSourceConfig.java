@@ -18,7 +18,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 @Configuration
-@ComponentScan(basePackages = "com.warchlak")
+@ComponentScan(basePackages = "com.warchlak.config.security")
 @EnableTransactionManagement
 @PropertySource("classpath:AuthenticationDataSourceProperties.prop")
 public class AuthenticationDataSourceConfig
@@ -52,7 +52,7 @@ public class AuthenticationDataSourceConfig
 			
 		} catch (Exception e)
 		{
-			LOGGER.info("Exception during user data source intialization: " + e.getMessage());
+			LOGGER.info("Exception during user data source initialization: " + e.getMessage());
 		}
 		
 		return userDataSource;
@@ -64,6 +64,7 @@ public class AuthenticationDataSourceConfig
 		
 		properties.setProperty("hibernate.dialect", environment.getProperty("hibernate_dialect_class"));
 		properties.setProperty("hibernate.show_sql", environment.getProperty("hibernate_showSQL"));
+		properties.setProperty("hibernate.jdbc.time_zone", environment.getProperty("hibernate_timeZone"));
 		
 		return properties;
 	}

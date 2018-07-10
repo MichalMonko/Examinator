@@ -5,6 +5,11 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -14,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -44,6 +50,41 @@ public class MvcConfiguration implements WebMvcConfigurer
 		resolver.setSuffix(".jsp");
 		
 		return resolver;
+	}
+	
+	@Bean
+	public JavaMailSender getJavaMailSender()
+	{
+		
+		String emailPassword = "";
+		
+		//File will be hidden on github
+		try
+		{
+			Resource resource = new ClassPathResource("/emailPasswords.prop");
+			Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+			emailPassword = properties.getProperty("email.password");
+		} catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		
+		
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		mailSender.setHost("smtp.gmail.com");
+		mailSender.setPort(587);
+		
+		mailSender.setUsername("testownikiPWR@gmail.com");
+		mailSender.setPassword(emailPassword);
+		
+		Properties props = mailSender.getJavaMailProperties();
+		props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.debug", "true");
+		
+		return mailSender;
 	}
 	
 	@Override
