@@ -22,7 +22,7 @@
 
 <body style="padding-top: 100px" class="bg-dark">
 
-<%@include file="navbar.jsp"%>
+<%@include file="navbar.jsp" %>
 
 <div class="text-white">
 
@@ -115,7 +115,7 @@
 
             <label for="emailField">Email studencki:</label>
             <form:input id="emailField" type="email"
-                           class="form-control" path="email"/>
+                        class="form-control" path="email"/>
             <spring:bind path="email">
                 <c:if test="${status.error}">
                     <div class="alert alert-danger">
@@ -141,7 +141,20 @@
 </div>
 </form:form>
 
-
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4 text-center text-white">
+        <br>
+        <p>
+            <small>Potrzebujesz nowego linku aktywacyjnego?</small>
+            <a href="/authentication/showResendTokenPage">
+                <span class="badge badge-pill badge-light"> Kliknij tutaj!</span>
+            </a>
+        </p>
+        <br>
+    </div>
+    <div class="col-sm-4"></div>
+</div>
 
 <div class="row">
     <div class="col-sm-3"></div>

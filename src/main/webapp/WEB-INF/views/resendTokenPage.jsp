@@ -10,7 +10,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Logowanie</title>
+    <title>Wyślij link aktywacyjny</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
           integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
           crossorigin="anonymous">
@@ -21,31 +21,44 @@
 <body style="padding-top: 100px" class="bg-dark">
 
 
-<%@include file="navbar.jsp"%>
+<%@include file="navbar.jsp" %>
 
-<c:url value="/authentication/login" var="loginUrl"/>
+<c:url value="/authentication/resendToken" var="resendUrl"/>
 
-<div class="text-white">
-    <form:form action="${loginUrl}" method="post">
+<div class="container text-white items-center">
 
-        <c:if test="${param.error != null}">
-            <div class="row">
+    <c:if test="${error}">
+        <div class="row">
 
-                <div class="col-sm-4"></div>
-                <div class="col-sm-4">
-                    <div class="alert alert-danger">
-                        <strong>Błąd! </strong>Nieprawidłowa nazwa użytkownika lub hasło.
-                    </div>
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <div class="alert alert-danger">
+                       <strong>Błąd! </strong> ${errorMessage}
                 </div>
-                <div class="col-sm-4"></div>
             </div>
-        </c:if>
+            <div class="col-sm-4"></div>
+        </div>
+    </c:if>
 
+    <c:if test="${success}">
+        <div class="row">
+
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <div class="alert alert-success">
+                    <strong>Sukces! </strong> Wysłano ponownie link aktywacyjny, sprawdź skrzynkę mailową
+                </div>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+    </c:if>
+
+    <form:form action="${resendUrl}" method="post">
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <label for="username">Nazwa użytkownika:</label>
-                <input type="text" class="form-control" id="username" name="username"/>
+                <label for="emailField">Email:</label>
+                <input name="email" class="form-control" type="text" id="emailField"/>
                 <br>
             </div>
             <div class="col-sm-4"></div>
@@ -54,19 +67,8 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <label for="password">Hasło:</label>
-                <input type="password" class="form-control" id="password" name="password"/>
                 <br>
-            </div>
-            <div class="col-sm-4"></div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4">
-                <br>
-                <input type="submit" class="btn btn-primary btn-block" value="Zaloguj">
+                <input type="submit" class="btn btn-primary btn-block" value="Wyślij ponownie">
                 <br>
             </div>
             <div class="col-sm-4"></div>
@@ -89,7 +91,8 @@
         </div>
     </div>
 </div>
-
 <div class="col-sm-3"></div>
+
 </body>
 </html>
+

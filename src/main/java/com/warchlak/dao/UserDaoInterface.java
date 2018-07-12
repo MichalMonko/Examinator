@@ -11,4 +11,5 @@ public interface UserDaoInterface
 	public void saveToken(ValidationToken token);
 	
 	ValidationToken getValidationToken(String token);
+	void updateUserToken(String username, String token );
 }

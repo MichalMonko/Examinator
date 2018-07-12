@@ -12,7 +12,7 @@ import java.util.TimeZone;
 @Table(name = "validation_tokens")
 public class ValidationToken
 {
-	private static final int expirationTimeInMinutes = 1440;
+	public static final int expirationTimeInMinutes = 1440;
 	
 	public ValidationToken()
 	{
@@ -41,7 +41,7 @@ public class ValidationToken
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date expirationDate;
 	
-	private Date calculateExpirationDate()
+	public Date calculateExpirationDate()
 	{
 		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		calendar.setTime(new Timestamp(calendar.getTime().getTime()));

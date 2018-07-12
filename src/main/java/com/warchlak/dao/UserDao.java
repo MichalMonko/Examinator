@@ -2,6 +2,7 @@ package com.warchlak.dao;
 
 import com.warchlak.entity.User;
 import com.warchlak.entity.ValidationToken;
+import com.warchlak.exceptionHandling.ResourceNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -77,9 +78,9 @@ public class UserDao implements UserDaoInterface
 	{
 		Session session = sessionFactory.getCurrentSession();
 		Query<ValidationToken> query = session.createQuery("FROM ValidationToken where token=:token", ValidationToken.class);
-		query.setParameter("token" ,token);
+		query.setParameter("token", token);
 		
-		if(query.getResultList().isEmpty())
+		if (query.getResultList().isEmpty())
 		{
 			return null;
 		}
@@ -90,5 +91,26 @@ public class UserDao implements UserDaoInterface
 		
 	}
 	
+	
+	@Override
+	public void updateUserToken(String username, String token)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		Query<ValidationToken> query = session.createQuery("FROM ValidationToken where user.username=:username",
+				ValidationToken.class);
+		query.setParameter("username", username);
+		ValidationToken validationToken = query.getResultList().get(0);
+		
+		if (validationToken != null)
+		{
+			validationToken.setToken(token);
+			validationToken.setExpirationDate(validationToken.calculateExpirationDate());
+		}
+		else
+		{
+			throw new ResourceNotFoundException("No validation token for given user found");
+		}
+		
+	}
 	
 }

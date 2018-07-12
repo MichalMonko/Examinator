@@ -3,12 +3,13 @@ package com.warchlak.controller;
 import com.warchlak.DTO.UserDTO;
 import com.warchlak.entity.User;
 import com.warchlak.entity.ValidationToken;
-import com.warchlak.events.UserRegistrationEvent;
 import com.warchlak.exceptionHandling.UserAlreadyExistsException;
 import com.warchlak.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/authentication")
@@ -77,12 +79,12 @@ public class SecurityController
 		try
 		{
 			
-			User registeredUser = userService.saveUser(userDTO);
-			
 			String appUrl = request.getContextPath();
-			eventPublisher.publishEvent(new UserRegistrationEvent(registeredUser, appUrl));
+			userService.registerUser(userDTO, eventPublisher, appUrl);
 			
-			request.setAttribute("success", "Użytkownik został zarejestrowany");
+			
+			request.setAttribute("success", "Użytkownik został zarejestrowany, " +
+					"na pocztę email przesłano link aktywacyjny ważny 24 godziny");
 			
 		} catch (UserAlreadyExistsException e)
 		{
@@ -98,47 +100,89 @@ public class SecurityController
 	}
 	
 	@RequestMapping("/confirmRegistration")
-	public String confirmRegistration(ModelAndView model, @RequestParam("token") String token)
+	public ModelAndView confirmRegistration(ModelMap model, @RequestParam("token") String token)
 	{
 		ValidationToken validationToken = userService.getValidationToken(token);
 		
 		if (validationToken == null)
 		{
-			model.addObject("error", true);
-			model.addObject("message", "Podany token nie istnieje, link może być niepoprawny" +
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Podany token nie istnieje, link może być niepoprawny" +
 					"lub jego czas życia wygasł");
-			return "registerConfirmationPage";
+		}
+		else
+		{
+			
+			Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			long currentTime = calendar.getTime().getTime();
+			long deltaTime = validationToken.getExpirationDate().getTime() - currentTime;
+			
+			if (deltaTime <= 0)
+			{
+				model.addAttribute("error", true);
+				model.addAttribute("message", "Czas życia linku wygasł, w celu potwierdzenia konta" +
+						"poproś o ponowne wysłanie linku weryfikacyjnego");
+			}
+			else
+			{
+				
+				User user = validationToken.getUser();
+				user.setEnabled(true);
+				
+				try
+				{
+					userService.updateUser(user);
+				} catch (Exception e)
+				{
+					model.addAttribute("error", true);
+					model.addAttribute("message", "Nie udało się aktywować użytkownika, " +
+							"spróbuj ponownie później");
+				}
+			}
 		}
 		
-		Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		long currentTime = calendar.getTime().getTime();
-		long deltaTime = validationToken.getExpirationDate().getTime() - currentTime;
-		
-		if (deltaTime <= 0)
-		{
-			model.addObject("error", true);
-			model.addObject("message", "Czas życia linku wygasł, w celu potwierdzenia konta" +
-					"poproś o ponowne wysłanie linku weryfikacyjnego");
-			return "registerConfirmationPage";
-		}
-		
-		User user = validationToken.getUser();
-		user.setEnabled(true);
-		
-		try
-		{
-			userService.updateUser(user);
-		} catch (Exception e)
-		{
-			model.addObject("error", true);
-			model.addObject("message", "Nie udało się aktywować użytkownika, " +
-					"spróbuj ponownie później");
-		}
-		
-		return "registerConfirmationPage";
-		
-		
+		return new ModelAndView("registerConfirmationPage", model);
 	}
 	
+	@RequestMapping("/showResendTokenPage")
+	public String showResendTokenPage()
+	{
+		return "resendTokenPage";
+	}
+	
+	@PostMapping("/resendToken")
+	public ModelAndView resendToken(ModelMap model, @RequestParam(value = "email") String email, HttpServletRequest request)
+	{
+		User user = userService.getUserByEmail(email);
+		if (user == null)
+		{
+			model.addAttribute("error", true);
+			model.addAttribute("errorMessage",
+					"Nie udało się odnaleźć użytkownika o podanym adresie email");
+		}
+		else
+		{
+			try
+			{
+				String applicationUrl = request.getContextPath();
+				String newToken = UUID.randomUUID().toString();
+				userService.updateUserToken(email, newToken, applicationUrl);
+				
+				model.addAttribute("success", true);
+			} catch (MailException e)
+			{
+				model.addAttribute("error", true);
+				model.addAttribute("errorMessage", "" +
+						"Nie udało się wysłać linku aktywacyjnego, spróbuj ponownie później");
+			} catch (Exception e)
+			{
+				model.addAttribute("error", true);
+				model.addAttribute("errorMessage", "" +
+						"Wystąpił błąd przy próbie utworzenia linku");
+			}
+		}
+		
+		return new ModelAndView("resendTokenPage", model);
+	}
 	
 }

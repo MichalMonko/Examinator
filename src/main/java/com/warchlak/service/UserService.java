@@ -4,9 +4,14 @@ import com.warchlak.DTO.UserDTO;
 import com.warchlak.dao.UserDaoInterface;
 import com.warchlak.entity.User;
 import com.warchlak.entity.ValidationToken;
+import com.warchlak.events.UserRegistrationEvent;
+import com.warchlak.exceptionHandling.ResourceNotFoundException;
 import com.warchlak.exceptionHandling.UserAlreadyExistsException;
 import com.warchlak.factory.UserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +21,17 @@ import javax.annotation.Resource;
 @Transactional("userTransactionManager")
 public class UserService implements UserServiceInterface
 {
+	final
+	JavaMailSender mailSender;
+	
 	@Resource(name = "userDAO")
 	private final UserDaoInterface userDao;
 	
 	@Autowired
-	public UserService(UserDaoInterface userDao)
+	public UserService(UserDaoInterface userDao, JavaMailSender mailSender)
 	{
 		this.userDao = userDao;
+		this.mailSender = mailSender;
 	}
 	
 	@Override
@@ -71,8 +80,12 @@ public class UserService implements UserServiceInterface
 	@Override
 	public ValidationToken createValidationToken(User user, String token)
 	{
-		ValidationToken validationToken = new ValidationToken(token, user);
-		userDao.saveToken(validationToken);
+		ValidationToken validationToken;
+		if ((validationToken = userDao.getValidationToken(token)) == null)
+		{
+			validationToken = new ValidationToken(token, user);
+			userDao.saveToken(validationToken);
+		}
 		
 		return validationToken;
 	}
@@ -87,5 +100,41 @@ public class UserService implements UserServiceInterface
 	public void updateUser(User user)
 	{
 		userDao.saveUser(user);
+	}
+	
+	@Override
+	public void updateUserToken(String userEmail, String token, String applicationUrl)
+	{
+		User user;
+		if ((user = getUserByEmail(userEmail)) != null)
+		{
+			userDao.updateUserToken(user.getUsername(), token);
+			
+			String recipientEmail = user.getEmail();
+			String registrationUrl = applicationUrl +
+					"/authentication/confirmRegistration?token=" + token;
+			String subject = "Potwierdzenie rejestracji w serwisie TESTOWNIKI";
+			String content = "Aby aktywować swoje konto skopiuj poniższy link w okno przeglądarki: " +
+					"\n" + "localhost:8000" + registrationUrl;
+			
+			SimpleMailMessage message = new SimpleMailMessage();
+			
+			message.setTo(recipientEmail);
+			message.setSubject(subject);
+			message.setText(content);
+			
+			mailSender.send(message);
+		}
+		else
+		{
+			throw new ResourceNotFoundException("User with given email cannot be found");
+		}
+	}
+	
+	@Override
+	public void registerUser(UserDTO userDTO, ApplicationEventPublisher eventPublisher, String applicationUrl)
+	{
+		User user = saveUser(userDTO);
+		eventPublisher.publishEvent(new UserRegistrationEvent(user, applicationUrl));
 	}
 }

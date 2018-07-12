@@ -36,6 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 		    .antMatchers("/authentication/signUp").permitAll()
 		    .antMatchers("/authentication/registerUser").permitAll()
 		    .antMatchers("/authentication/confirmRegistration").permitAll()
+		    .antMatchers("/authentication/showResendTokenPage").permitAll()
+		    .antMatchers("/authentication/resendToken").permitAll()
 		    .antMatchers("/question/**").access("hasRole('ADMIN') or hasRole('CONTRIBUTOR')")
 		    .anyRequest()
 		    .authenticated()

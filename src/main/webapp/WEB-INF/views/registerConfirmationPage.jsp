@@ -24,15 +24,15 @@
 
 <%@include file="navbar.jsp" %>
 
-<div class="text-white">
+<div class="text-white container item-center">
 
     <c:choose>
         <c:when test="${error}">
-            <h2>Error: ${message}</h2>
+            <h3><strong>Błąd: </strong> ${message}</h3>
         </c:when>
 
         <c:otherwise>
-            Udało się
+            <h3>Użytkownik pomyślnie aktywowany<h3>
         </c:otherwise>
     </c:choose>
 

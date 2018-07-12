@@ -1,9 +1,6 @@
 package com.warchlak.dao;
 
-import com.warchlak.entity.Answer;
-import com.warchlak.entity.Course;
-import com.warchlak.entity.Major;
-import com.warchlak.entity.Question;
+import com.warchlak.entity.*;
 import com.warchlak.exceptionHandling.ResourceNotFoundException;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -124,35 +121,4 @@ public class QuestionDao implements QuestionDaoInterface
 		
 		return course;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
