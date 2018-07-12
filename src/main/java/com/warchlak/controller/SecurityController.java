@@ -145,9 +145,9 @@ public class SecurityController
 	}
 	
 	@RequestMapping("/showResendTokenPage")
-	public String showResendTokenPage()
+	public String ResendTokenPage()
 	{
-		return "resendTokenPage";
+		return "tokenResendPage";
 	}
 	
 	@PostMapping("/resendToken")
@@ -182,7 +182,7 @@ public class SecurityController
 			}
 		}
 		
-		return new ModelAndView("resendTokenPage", model);
+		return new ModelAndView("tokenResendPage", model);
 	}
 	
 }
