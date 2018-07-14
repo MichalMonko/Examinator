@@ -21,17 +21,21 @@ import javax.annotation.Resource;
 @Transactional("userTransactionManager")
 public class UserService implements UserServiceInterface
 {
-	final
+	final private
 	JavaMailSender mailSender;
+	
+	final private
+	ApplicationEventPublisher eventPublisher;
 	
 	@Resource(name = "userDAO")
 	private final UserDaoInterface userDao;
 	
 	@Autowired
-	public UserService(UserDaoInterface userDao, JavaMailSender mailSender)
+	public UserService(UserDaoInterface userDao, JavaMailSender mailSender, ApplicationEventPublisher eventPublisher)
 	{
 		this.userDao = userDao;
 		this.mailSender = mailSender;
+		this.eventPublisher = eventPublisher;
 	}
 	
 	@Override
@@ -78,16 +82,14 @@ public class UserService implements UserServiceInterface
 	}
 	
 	@Override
-	public ValidationToken createValidationToken(User user, String token)
+	public void createValidationToken(User user, String token)
 	{
 		ValidationToken validationToken;
-		if ((validationToken = userDao.getValidationToken(token)) == null)
+		if (userDao.getValidationToken(token) == null)
 		{
 			validationToken = new ValidationToken(token, user);
 			userDao.saveToken(validationToken);
 		}
-		
-		return validationToken;
 	}
 	
 	@Override
@@ -132,7 +134,7 @@ public class UserService implements UserServiceInterface
 	}
 	
 	@Override
-	public void registerUser(UserDTO userDTO, ApplicationEventPublisher eventPublisher, String applicationUrl)
+	public void registerUser(UserDTO userDTO, String applicationUrl)
 	{
 		User user = saveUser(userDTO);
 		eventPublisher.publishEvent(new UserRegistrationEvent(user, applicationUrl));

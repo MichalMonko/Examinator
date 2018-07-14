@@ -28,7 +28,7 @@
         <ul class="nav navbar-nav navbar-right">
             <c:choose>
                 <c:when test="${loggedIn == true}">
-                    <li><a href="/user/accountPage"><span class="glyphicon glyphicon-user"></span>${loggedUser}</a></li>
+                    <li><a href="/authentication/account"><span class="glyphicon glyphicon-user"></span>${loggedUser}</a></li>
                     <li><a id="logoutLink" href="#" onclick="logout()"><span
                             class="glyphicon glyphicon-log-in"></span>Wyloguj</a>
                     </li>

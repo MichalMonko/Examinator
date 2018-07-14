@@ -1,25 +1,24 @@
 package com.warchlak.controller;
 
 import com.warchlak.DTO.UserDTO;
+import com.warchlak.config.security.AuthenticationTracker;
 import com.warchlak.entity.User;
 import com.warchlak.entity.ValidationToken;
 import com.warchlak.exceptionHandling.UserAlreadyExistsException;
 import com.warchlak.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.mail.MailException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -28,13 +27,11 @@ import java.util.UUID;
 public class SecurityController
 {
 	final private UserServiceInterface userService;
-	private ApplicationEventPublisher eventPublisher;
 	
 	@Autowired
-	public SecurityController(UserServiceInterface userService, ApplicationEventPublisher eventPublisher)
+	public SecurityController(UserServiceInterface userService)
 	{
 		this.userService = userService;
-		this.eventPublisher = eventPublisher;
 	}
 	
 	@RequestMapping("/login")
@@ -80,7 +77,7 @@ public class SecurityController
 		{
 			
 			String appUrl = request.getContextPath();
-			userService.registerUser(userDTO, eventPublisher, appUrl);
+			userService.registerUser(userDTO, appUrl);
 			
 			
 			request.setAttribute("success", "Użytkownik został zarejestrowany, " +
@@ -99,8 +96,8 @@ public class SecurityController
 		
 	}
 	
-	@RequestMapping("/confirmRegistration")
-	public ModelAndView confirmRegistration(ModelMap model, @RequestParam("token") String token)
+	@RequestMapping("/confirmRegistration/{token}")
+	public ModelAndView confirmRegistration(ModelMap model, @PathVariable("token") String token)
 	{
 		ValidationToken validationToken = userService.getValidationToken(token);
 		
@@ -183,6 +180,83 @@ public class SecurityController
 		}
 		
 		return new ModelAndView("tokenResendPage", model);
+	}
+	
+	@RequestMapping("/account")
+	public ModelAndView showAccountControlPage(ModelMap model)
+	{
+		String username = AuthenticationTracker.getLoggedUsername();
+		Collection<? extends GrantedAuthority> userRoles = AuthenticationTracker.getLoggedUserRoles();
+		
+		model.addAttribute("username", username);
+		model.addAttribute("userRole", determineUserRole(userRoles));
+		
+		return new ModelAndView("accountPage", model);
+	}
+	
+	@PostMapping("/changePassword")
+	public ModelAndView sendChangePasswordLink(@RequestParam("newPassword") String newPassword,
+	                                           @RequestParam("newPasswordConfirm") String newPasswordConfirm,
+	                                           ModelMap model)
+	{
+		if (!newPassword.equals(newPasswordConfirm))
+		{
+			model.addAttribute("error", true);
+			model.addAttribute("message", "Hasła muszą być identyczne!");
+		}
+		else
+		{
+			User user = userService.getUserByUsername(AuthenticationTracker.getLoggedUsername());
+			// TODO: send confirmation email
+			model.addAttribute("success", true);
+			model.addAttribute("message", "Wysłano link weryfikujący, sprawdź pocztę w celu zmiany hasła");
+		}
+		return new ModelAndView("accountPage", model);
+	}
+	
+	@PostMapping("/removeUser")
+	public ModelAndView sendRemoveUserLink(ModelMap model)
+	{
+		User user = userService.getUserByUsername(AuthenticationTracker.getLoggedUsername());
+		//TODO: send confirmation email
+		
+		return new ModelAndView("accountPage", model);
+	}
+	
+	@PostMapping("/changePassword/{token}")
+	public ModelAndView changePassword(@PathVariable("token") String token,
+	                                   ModelMap model)
+	{
+		//TODO: Change user password if token valid
+		return new ModelAndView();
+	}
+	
+	@PostMapping("/removeUser/{token}")
+	public ModelAndView removeUser(@PathVariable("token") String token,
+	                                   ModelMap model)
+	{
+		//TODO: Remove User if token valid
+		return new ModelAndView();
+	}
+	
+	private String determineUserRole(Collection<? extends GrantedAuthority> userRoles)
+	{
+		if (userRoles.stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")))
+		{
+			return "ADMIN";
+		}
+		
+		if (userRoles.stream().anyMatch(r -> r.getAuthority().equals("ROLE_CONTRIBUTOR")))
+		{
+			return "KONTRYBUTOR";
+		}
+		
+		if (userRoles.stream().anyMatch(r -> r.getAuthority().equals("ROLE_USER")))
+		{
+			return "STUDENT";
+		}
+		
+		return "";
 	}
 	
 }

@@ -23,8 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception
 	{
-		auth.jdbcAuthentication().dataSource(userDataSource)
-		.authoritiesByUsernameQuery("select username,password,email,enabled from users where username=?");
+		auth.jdbcAuthentication().dataSource(userDataSource);
 	}
 	
 	@Override
@@ -38,7 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 		    .antMatchers("/authentication/confirmRegistration").permitAll()
 		    .antMatchers("/authentication/showResendTokenPage").permitAll()
 		    .antMatchers("/authentication/resendToken").permitAll()
-		    .antMatchers("/question/**").access("hasRole('ADMIN') or hasRole('CONTRIBUTOR')")
+		    .antMatchers("/authentication/account").access("hasAnyAuthority('ROLE_USER','ROLE_ADMIN','ROLE_CONTRIBUTOR')")
+		    .antMatchers("/question/**").access("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_CONTRIBUTOR')")
 		    .anyRequest()
 		    .authenticated()
 		    .and()

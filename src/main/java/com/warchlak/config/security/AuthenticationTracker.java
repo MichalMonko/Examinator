@@ -2,7 +2,10 @@ package com.warchlak.config.security;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Collection;
 
 public class AuthenticationTracker
 {
@@ -16,5 +19,11 @@ public class AuthenticationTracker
 	{
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		return authentication.getName();
+	}
+	
+	public static Collection<? extends GrantedAuthority> getLoggedUserRoles()
+	{
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return authentication.getAuthorities();
 	}
 }

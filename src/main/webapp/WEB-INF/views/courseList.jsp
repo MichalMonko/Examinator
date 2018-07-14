@@ -68,7 +68,7 @@
                                data-toggle="dropdown">${course.name}<span class="caret"></span></a>
                             <ul class="dropdown-menu">
 
-                                <sec:authorize access="hasAnyRole('ADMIN','CONTRIBUTOR')">
+                                <sec:authorize access="hasAnyAuthority('ROLE_ADMIN','ROLE_CONTRIBUTOR')">
                                 <li>
                                     <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
                                        href="${addQuestionForm}">Dodaj pytanie (formularz)</a>
