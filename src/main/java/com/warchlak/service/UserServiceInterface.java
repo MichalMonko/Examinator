@@ -2,6 +2,7 @@ package com.warchlak.service;
 
 import com.warchlak.DTO.UserDTO;
 import com.warchlak.entity.User;
+import com.warchlak.entity.UserPendingPassword;
 import com.warchlak.entity.ValidationToken;
 
 public interface UserServiceInterface
@@ -27,4 +28,8 @@ public interface UserServiceInterface
 	void resendUserToken(User user,String token, String applicationUrl);
 	
 	void updateUserToken(User user, String newToken, ValidationToken.TOKEN_TYPE tokenType);
+	
+	void saveUserPendingPassword(User user, String newPassword);
+	
+	UserPendingPassword getUserPendingPassword(User user);
 }

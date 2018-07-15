@@ -3,6 +3,7 @@ package com.warchlak.controller;
 import com.warchlak.DTO.UserDTO;
 import com.warchlak.config.security.AuthenticationTracker;
 import com.warchlak.entity.User;
+import com.warchlak.entity.UserPendingPassword;
 import com.warchlak.entity.ValidationToken;
 import com.warchlak.exceptionHandling.UserAlreadyExistsException;
 import com.warchlak.messages.CustomMessageSource;
@@ -105,11 +106,11 @@ public class SecurityController
 		
 		if (validationToken == null)
 		{
-			model.addAttribute("errorMessage", messageSource.getMessage("error.registered.invalidToken"));
+			model.addAttribute("errorMessage", messageSource.getMessage("error.invalidToken"));
 		}
 		else if (validationToken.getTokenType() != ValidationToken.TOKEN_TYPE.REGISTER)
 		{
-			model.addAttribute("errorMessage", messageSource.getMessage("error.registered.invalidTokenType"));
+			model.addAttribute("errorMessage", messageSource.getMessage("error.invalidTokenType"));
 		}
 		else
 		{
@@ -218,6 +219,7 @@ public class SecurityController
 				String newToken = UUID.randomUUID().toString();
 				
 				userService.updateUserToken(user, newToken, ValidationToken.TOKEN_TYPE.CHANGE_PASSWORD);
+				userService.saveUserPendingPassword(user, newPassword);
 				userService.sendPasswordChangeConfirmationLink(user, newToken, applicationUrl);
 				
 				model.addAttribute("successMessage", messageSource.getMessage("success.passwordChangedEmailSent"));
@@ -242,8 +244,25 @@ public class SecurityController
 	public ModelAndView changePassword(@PathVariable("token") String token,
 	                                   ModelMap model)
 	{
-		//TODO: Change user password if token valid
-		return new ModelAndView();
+		ValidationToken validationToken = userService.getValidationToken(token);
+		if (validationToken == null)
+		{
+			model.addAttribute("errorMessage", messageSource.getMessage("error.invalidToken"));
+		}
+		else if (validationToken.getTokenType() != ValidationToken.TOKEN_TYPE.CHANGE_PASSWORD)
+		{
+			model.addAttribute("errorMessage", messageSource.getMessage("error.invalidTokenType"));
+		}
+		else
+		{
+			User user = validationToken.getUser();
+			UserPendingPassword userPendingPassword = userService.getUserPendingPassword(user);
+			user.setPassword(userPendingPassword.getPendingPassword());
+			userService.updateUser(user);
+			model.addAttribute("successMessage", messageSource.getMessage("success.passwordChanged"));
+		}
+		
+		return new ModelAndView("accountPage", model);
 	}
 	
 	@RequestMapping("/removeUser/{token}")

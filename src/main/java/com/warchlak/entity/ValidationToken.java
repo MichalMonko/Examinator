@@ -14,7 +14,7 @@ public class ValidationToken
 		REGISTER, CHANGE_PASSWORD, REMOVE_ACCOUNT
 	};
 	
-	public static final int expirationTimeInMinutes = 1440;
+	private static final int expirationTimeInMinutes = 1440;
 	
 	public ValidationToken()
 	{

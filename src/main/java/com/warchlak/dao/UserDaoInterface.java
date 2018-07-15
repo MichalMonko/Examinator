@@ -1,6 +1,7 @@
 package com.warchlak.dao;
 
 import com.warchlak.entity.User;
+import com.warchlak.entity.UserPendingPassword;
 import com.warchlak.entity.ValidationToken;
 
 public interface UserDaoInterface
@@ -14,4 +15,8 @@ public interface UserDaoInterface
 	void updateUserToken(String username, String token );
 	
 	void updateUserToken(String username, String newToken, ValidationToken.TOKEN_TYPE changePassword);
+	
+	void savePendingPassword(UserPendingPassword pendingPassword);
+	
+	UserPendingPassword getUserPendingPassword(String username);
 }

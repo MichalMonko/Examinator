@@ -1,6 +1,7 @@
 package com.warchlak.dao;
 
 import com.warchlak.entity.User;
+import com.warchlak.entity.UserPendingPassword;
 import com.warchlak.entity.ValidationToken;
 import com.warchlak.exceptionHandling.ResourceNotFoundException;
 import org.hibernate.Session;
@@ -119,4 +120,32 @@ public class UserDao implements UserDaoInterface
 			throw new ResourceNotFoundException("No validation token for given user found");
 		}
 	}
+	
+	@Override
+	public void savePendingPassword(UserPendingPassword pendingPassword)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.saveOrUpdate(pendingPassword);
+	}
+	
+	@Override
+	public UserPendingPassword getUserPendingPassword(String username)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		
+		Query<UserPendingPassword> query = session.createQuery("FROM UserPendingPassword " +
+				"WHERE user.username=:username", UserPendingPassword.class);
+		query.setParameter("username", username);
+		
+		if (!query.getResultList().isEmpty())
+		{
+			return query.getResultList().get(0);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	
 }

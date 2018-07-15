@@ -3,6 +3,7 @@ package com.warchlak.service;
 import com.warchlak.DTO.UserDTO;
 import com.warchlak.dao.UserDaoInterface;
 import com.warchlak.entity.User;
+import com.warchlak.entity.UserPendingPassword;
 import com.warchlak.entity.ValidationToken;
 import com.warchlak.events.UserPasswordChangeEvent;
 import com.warchlak.events.UserRegistrationEvent;
@@ -12,6 +13,7 @@ import com.warchlak.exceptionHandling.UserAlreadyExistsException;
 import com.warchlak.factory.UserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -122,7 +124,7 @@ public class UserService implements UserServiceInterface
 			userDao.updateUserToken(user.getUsername(), newToken, tokenType);
 		} catch (ResourceNotFoundException e)
 		{
-			ValidationToken validationToken = new ValidationToken(newToken,user,tokenType);
+			ValidationToken validationToken = new ValidationToken(newToken, user, tokenType);
 			userDao.saveToken(validationToken);
 		}
 	}
@@ -143,5 +145,24 @@ public class UserService implements UserServiceInterface
 	public void resendUserToken(User user, String token, String applicationUrl)
 	{
 		eventPublisher.publishEvent(new UserTokenResendRequestEvent(user, token, applicationUrl));
+	}
+	
+	@Override
+	public void saveUserPendingPassword(User user, String newPassword)
+	{
+		String encryptedPassword = "{bcrypt}" + BCrypt.hashpw(newPassword, BCrypt.gensalt());
+		UserPendingPassword pendingPassword = userDao.getUserPendingPassword(user.getUsername());
+		
+		if (pendingPassword == null)
+		{
+			pendingPassword = new UserPendingPassword(user, encryptedPassword);
+		}
+			userDao.savePendingPassword(pendingPassword);
+	}
+	
+	@Override
+	public UserPendingPassword getUserPendingPassword(User user)
+	{
+		return userDao.getUserPendingPassword(user.getUsername());
 	}
 }
