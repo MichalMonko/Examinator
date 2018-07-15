@@ -12,6 +12,10 @@ import java.util.TimeZone;
 @Table(name = "validation_tokens")
 public class ValidationToken
 {
+	private enum TOKEN_TYPE {
+		REGISTER, CHANGE_PASSWORD, REMOVE_ACCOUNT
+	};
+	
 	public static final int expirationTimeInMinutes = 1440;
 	
 	public ValidationToken()
@@ -40,6 +44,10 @@ public class ValidationToken
 	@Column(name = "expiration_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date expirationDate;
+	
+	@Column(name = "type")
+	@Enumerated(EnumType.STRING)
+	private TOKEN_TYPE token_type = TOKEN_TYPE.REGISTER;
 	
 	public Date calculateExpirationDate()
 	{
@@ -93,5 +101,15 @@ public class ValidationToken
 	public void setExpirationDate(Date expirationDate)
 	{
 		this.expirationDate = expirationDate;
+	}
+	
+	public TOKEN_TYPE getToken_type()
+	{
+		return token_type;
+	}
+	
+	public void setToken_type(TOKEN_TYPE token_type)
+	{
+		this.token_type = token_type;
 	}
 }
