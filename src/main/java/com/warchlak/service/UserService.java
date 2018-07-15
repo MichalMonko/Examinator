@@ -5,12 +5,12 @@ import com.warchlak.dao.UserDaoInterface;
 import com.warchlak.entity.User;
 import com.warchlak.entity.ValidationToken;
 import com.warchlak.events.UserRegistrationEvent;
+import com.warchlak.events.UserTokenResendRequestEvent;
 import com.warchlak.exceptionHandling.ResourceNotFoundException;
 import com.warchlak.exceptionHandling.UserAlreadyExistsException;
 import com.warchlak.factory.UserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,21 +111,6 @@ public class UserService implements UserServiceInterface
 		if ((user = getUserByEmail(userEmail)) != null)
 		{
 			userDao.updateUserToken(user.getUsername(), token);
-			
-			String recipientEmail = user.getEmail();
-			String registrationUrl = applicationUrl +
-					"/authentication/confirmRegistration?token=" + token;
-			String subject = "Potwierdzenie rejestracji w serwisie TESTOWNIKI";
-			String content = "Aby aktywować swoje konto skopiuj poniższy link w okno przeglądarki: " +
-					"\n" + "localhost:8000" + registrationUrl;
-			
-			SimpleMailMessage message = new SimpleMailMessage();
-			
-			message.setTo(recipientEmail);
-			message.setSubject(subject);
-			message.setText(content);
-			
-			mailSender.send(message);
 		}
 		else
 		{
@@ -144,5 +129,10 @@ public class UserService implements UserServiceInterface
 	{
 		User user = saveUser(userDTO);
 		eventPublisher.publishEvent(new UserRegistrationEvent(user, applicationUrl));
+	}
+	
+	public void resendUserToken(User user, String token, String applicationUrl)
+	{
+		eventPublisher.publishEvent(new UserTokenResendRequestEvent(user, token, applicationUrl));
 	}
 }

@@ -152,6 +152,10 @@ public class SecurityController
 			model.addAttribute("errorMessage",
 					messageSource.getMessage("error.registered.userEmailNotFound"));
 		}
+		else if (user.isEnabled())
+		{
+			model.addAttribute("errorMessage", "error.registered.userAlreadyActive");
+		}
 		else
 		{
 			try
@@ -159,6 +163,7 @@ public class SecurityController
 				String applicationUrl = request.getContextPath();
 				String newToken = UUID.randomUUID().toString();
 				userService.updateUserToken(email, newToken, applicationUrl);
+				userService.resendUserToken(user, newToken, applicationUrl);
 				
 				model.addAttribute("success", true);
 			} catch (MailException e)
@@ -206,7 +211,7 @@ public class SecurityController
 				}
 				
 				String applicationUrl = request.getContextPath();
-				userService.sendPasswordChangeConfirmationLink(user,applicationUrl);
+				userService.sendPasswordChangeConfirmationLink(user, applicationUrl);
 				
 				model.addAttribute("successMessage", messageSource.getMessage("success.passwordChangedEmailSent"));
 			} catch (Exception e)
