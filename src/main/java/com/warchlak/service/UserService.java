@@ -134,6 +134,12 @@ public class UserService implements UserServiceInterface
 	}
 	
 	@Override
+	public void sendPasswordChangeConfirmationLink(User user, String applicationUrl)
+	{
+//		eventPublisher.publishEvent(new UserPasswordChangeEvent(user, applicationUrl));
+	}
+	
+	@Override
 	public void registerUser(UserDTO userDTO, String applicationUrl)
 	{
 		User user = saveUser(userDTO);

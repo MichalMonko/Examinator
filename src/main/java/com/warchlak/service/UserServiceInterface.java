@@ -21,4 +21,6 @@ public interface UserServiceInterface
 	void updateUserToken(String userEmail, String token, String applicationUrl);
 	
 	void registerUser(UserDTO userDTO, String applicationUrl);
+	
+	void sendPasswordChangeConfirmationLink(User user, String applicationUrl);
 }

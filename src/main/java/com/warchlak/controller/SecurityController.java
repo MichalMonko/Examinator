@@ -188,7 +188,7 @@ public class SecurityController
 	@PostMapping("/changePassword")
 	public ModelAndView sendChangePasswordLink(@RequestParam("newPassword") String newPassword,
 	                                           @RequestParam("newPasswordConfirm") String newPasswordConfirm,
-	                                           ModelMap model)
+	                                           ModelMap model, HttpServletRequest request)
 	{
 		if (!newPassword.equals(newPasswordConfirm))
 		{
@@ -196,9 +196,24 @@ public class SecurityController
 		}
 		else
 		{
-			User user = userService.getUserByUsername(AuthenticationTracker.getLoggedUsername());
+			try
+			{
+				User user = userService.getUserByUsername(AuthenticationTracker.getLoggedUsername());
+				if (user == null)
+				{
+					model.addAttribute("errorMessage", messageSource.getMessage("error.userNotFound"));
+					return new ModelAndView("accountPage", model);
+				}
+				
+				String applicationUrl = request.getContextPath();
+				userService.sendPasswordChangeConfirmationLink(user,applicationUrl);
+				
+				model.addAttribute("successMessage", messageSource.getMessage("success.passwordChangedEmailSent"));
+			} catch (Exception e)
+			{
+				model.addAttribute("errorMessage", messageSource.getMessage("error.changePasswordErrorOther"));
+			}
 			// TODO: send confirmation email
-			model.addAttribute("successMessage", messageSource.getMessage("success.passwordChangeEmailSent"));
 		}
 		return new ModelAndView("accountPage", model);
 	}
