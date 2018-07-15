@@ -36,6 +36,17 @@ public abstract class EmailMessageBuilder
 		this.recipientEmail = recipientEmail;
 	}
 	
-	public abstract SimpleMailMessage buildEmail();
+	public SimpleMailMessage buildEmail()
+	{
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		
+		String messageText = content + controllerPath + token;
+		
+		mailMessage.setSubject(subject);
+		mailMessage.setText(messageText);
+		mailMessage.setTo(recipientEmail);
+		
+		return mailMessage;
+	}
 	
 }

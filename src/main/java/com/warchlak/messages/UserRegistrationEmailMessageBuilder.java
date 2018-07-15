@@ -1,7 +1,6 @@
 package com.warchlak.messages;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,18 +16,4 @@ public class UserRegistrationEmailMessageBuilder extends EmailMessageBuilder
 		this.controllerPath = messageSource.getMessage("emailBuilder.register.url");
 	}
 	
-	@Override
-	public SimpleMailMessage buildEmail()
-	{
-		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		
-		String messageText = content + controllerPath + token;
-		
-		mailMessage.setSubject(subject);
-		mailMessage.setText(messageText);
-		mailMessage.setTo(recipientEmail);
-		
-		return mailMessage;
-	}
-
 }
