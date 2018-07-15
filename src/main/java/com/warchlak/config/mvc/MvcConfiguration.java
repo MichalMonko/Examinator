@@ -4,6 +4,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -64,11 +65,10 @@ public class MvcConfiguration implements WebMvcConfigurer
 			Resource resource = new ClassPathResource("/emailPasswords.prop");
 			Properties properties = PropertiesLoaderUtils.loadProperties(resource);
 			emailPassword = properties.getProperty("email.password");
-		} catch(IOException e)
+		} catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		
 		
 		
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -91,6 +91,15 @@ public class MvcConfiguration implements WebMvcConfigurer
 	public void addResourceHandlers(ResourceHandlerRegistry registry)
 	{
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+	}
+	
+	@Bean
+	ResourceBundleMessageSource messageSource()
+	{
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasename("messages_pl_PL");
+		messageSource.setDefaultEncoding("UTF-8");
+		return messageSource;
 	}
 	
 	private ComboPooledDataSource getDataSource()

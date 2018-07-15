@@ -5,6 +5,7 @@ import com.warchlak.config.security.AuthenticationTracker;
 import com.warchlak.entity.User;
 import com.warchlak.entity.ValidationToken;
 import com.warchlak.exceptionHandling.UserAlreadyExistsException;
+import com.warchlak.messages.CustomMessageSource;
 import com.warchlak.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -28,10 +29,14 @@ public class SecurityController
 {
 	final private UserServiceInterface userService;
 	
+	final private CustomMessageSource messageSource;
+	
+	
 	@Autowired
-	public SecurityController(UserServiceInterface userService)
+	public SecurityController(UserServiceInterface userService, CustomMessageSource messageSource)
 	{
 		this.userService = userService;
+		this.messageSource = messageSource;
 	}
 	
 	@RequestMapping("/login")
@@ -60,40 +65,37 @@ public class SecurityController
 	}
 	
 	@PostMapping("/registerUser")
-	public String registerUser(@Valid UserDTO userDTO, BindingResult bindingResult,
-	                           HttpServletRequest request)
+	public ModelAndView registerUser(@Valid UserDTO userDTO, BindingResult bindingResult,
+	                                 ModelMap model, HttpServletRequest request)
 	{
 		if (bindingResult.hasErrors())
 		{
-			return "signupPage";
+			return new ModelAndView("signupPage", model);
 		}
-		if (!userDTO.getPassword().equals(userDTO.getConfirmedPassword()))
+		else if (!userDTO.getPassword().equals(userDTO.getConfirmedPassword()))
 		{
-			request.setAttribute("error", "Hasła nie są identyczne!");
-			return "signupPage";
+			model.addAttribute("errorMessage", messageSource.getMessage("error.password.notTheSame"));
 		}
-		
-		try
+		else
 		{
-			
-			String appUrl = request.getContextPath();
-			userService.registerUser(userDTO, appUrl);
-			
-			
-			request.setAttribute("success", "Użytkownik został zarejestrowany, " +
-					"na pocztę email przesłano link aktywacyjny ważny 24 godziny");
-			
-		} catch (UserAlreadyExistsException e)
-		{
-			request.setAttribute("error", "Użytkownik o podanym adresie email lub loginie już istnieje.");
-		} catch (Exception e)
-		{
-			System.out.println(e.getMessage());
-			request.setAttribute("error", "Wystąpił błąd przy dodawania użytkownika, spróbuj ponownie później.");
+			try
+			{
+				String appUrl = request.getContextPath();
+				userService.registerUser(userDTO, appUrl);
+				
+				model.addAttribute("successMessage", messageSource.getMessage("success.registered.emailSent"));
+				
+			} catch (UserAlreadyExistsException e)
+			{
+				model.addAttribute("errorMessage", messageSource.getMessage("error.registered.userExists"));
+			} catch (Exception e)
+			{
+				System.out.println(e.getMessage());
+				model.addAttribute("errorMessage", messageSource.getMessage("error.registered.other"));
+			}
 		}
 		
-		return "signupPage";
-		
+		return new ModelAndView("signupPage", model);
 	}
 	
 	@RequestMapping("/confirmRegistration/{token}")
@@ -103,9 +105,7 @@ public class SecurityController
 		
 		if (validationToken == null)
 		{
-			model.addAttribute("error", true);
-			model.addAttribute("message", "Podany token nie istnieje, link może być niepoprawny" +
-					"lub jego czas życia wygasł");
+			model.addAttribute("errorMessage", messageSource.getMessage("error.registered.invalidToken"));
 		}
 		else
 		{
@@ -116,9 +116,7 @@ public class SecurityController
 			
 			if (deltaTime <= 0)
 			{
-				model.addAttribute("error", true);
-				model.addAttribute("message", "Czas życia linku wygasł, w celu potwierdzenia konta" +
-						"poproś o ponowne wysłanie linku weryfikacyjnego");
+				model.addAttribute("errorMessage", messageSource.getMessage("error.registered.tokenExpired"));
 			}
 			else
 			{
@@ -131,9 +129,7 @@ public class SecurityController
 					userService.updateUser(user);
 				} catch (Exception e)
 				{
-					model.addAttribute("error", true);
-					model.addAttribute("message", "Nie udało się aktywować użytkownika, " +
-							"spróbuj ponownie później");
+					model.addAttribute("message", messageSource.getMessage("error.registered.activationOther"));
 				}
 			}
 		}
@@ -153,9 +149,8 @@ public class SecurityController
 		User user = userService.getUserByEmail(email);
 		if (user == null)
 		{
-			model.addAttribute("error", true);
 			model.addAttribute("errorMessage",
-					"Nie udało się odnaleźć użytkownika o podanym adresie email");
+					messageSource.getMessage("error.registered.userEmailNotFound"));
 		}
 		else
 		{
@@ -168,14 +163,10 @@ public class SecurityController
 				model.addAttribute("success", true);
 			} catch (MailException e)
 			{
-				model.addAttribute("error", true);
-				model.addAttribute("errorMessage", "" +
-						"Nie udało się wysłać linku aktywacyjnego, spróbuj ponownie później");
+				model.addAttribute("errorMessage", messageSource.getMessage("error.tokenResendError"));
 			} catch (Exception e)
 			{
-				model.addAttribute("error", true);
-				model.addAttribute("errorMessage", "" +
-						"Wystąpił błąd przy próbie utworzenia linku");
+				model.addAttribute("errorMessage", messageSource.getMessage("error.tokenLinkCreationError"));
 			}
 		}
 		
@@ -201,15 +192,13 @@ public class SecurityController
 	{
 		if (!newPassword.equals(newPasswordConfirm))
 		{
-			model.addAttribute("error", true);
-			model.addAttribute("message", "Hasła muszą być identyczne!");
+			model.addAttribute("errorMessage", messageSource.getMessage("error.password.notTheSame"));
 		}
 		else
 		{
 			User user = userService.getUserByUsername(AuthenticationTracker.getLoggedUsername());
 			// TODO: send confirmation email
-			model.addAttribute("success", true);
-			model.addAttribute("message", "Wysłano link weryfikujący, sprawdź pocztę w celu zmiany hasła");
+			model.addAttribute("successMessage", messageSource.getMessage("success.passwordChangeEmailSent"));
 		}
 		return new ModelAndView("accountPage", model);
 	}
@@ -233,7 +222,7 @@ public class SecurityController
 	
 	@PostMapping("/removeUser/{token}")
 	public ModelAndView removeUser(@PathVariable("token") String token,
-	                                   ModelMap model)
+	                               ModelMap model)
 	{
 		//TODO: Remove User if token valid
 		return new ModelAndView();

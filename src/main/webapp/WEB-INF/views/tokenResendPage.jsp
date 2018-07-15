@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: fff
@@ -27,7 +28,7 @@
 
 <div class="container text-white items-center">
 
-    <c:if test="${error}">
+    <c:if test="${errorMessage != null}">
         <div class="row">
 
             <div class="col-sm-4"></div>
@@ -46,7 +47,7 @@
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
                 <div class="alert alert-success">
-                    <strong>Sukces! </strong> Wysłano ponownie link aktywacyjny, sprawdź skrzynkę mailową
+                    <strong>Sukces! </strong> <spring:message key="success.token.emailSent"/>
                 </div>
             </div>
             <div class="col-sm-4"></div>

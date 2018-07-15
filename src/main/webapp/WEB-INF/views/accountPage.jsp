@@ -30,17 +30,17 @@
     <div class="row">
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
-            <c:if test="${error != null}">
+            <c:if test="${errorMessage != null}">
                 <div class="alert alert-danger">
                     <strong>Błąd formularza! </strong>
-                        ${error}
+                        ${errorMessage}
                 </div>
             </c:if>
 
-            <c:if test="${success != null}">
+            <c:if test="${successMessage != null}">
                 <div class="alert alert-success">
                     <strong>Sukces! </strong>
-                        ${success}
+                        ${successMessage}
                 </div>
             </c:if>
         </div>

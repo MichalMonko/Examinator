@@ -24,11 +24,11 @@
 
 <%@include file="navbar.jsp" %>
 
-<div class="text-white container item-center">
+<div class="text-white container items-center text-center">
 
     <c:choose>
-        <c:when test="${error}">
-            <h3><strong>Błąd: </strong> ${message}</h3>
+        <c:when test="${errorMessage != null}">
+            <h3><strong>Błąd: </strong> ${errorMessage}</h3>
         </c:when>
 
         <c:otherwise>
