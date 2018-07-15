@@ -1,7 +1,5 @@
 package com.warchlak.entity;
 
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -12,7 +10,7 @@ import java.util.TimeZone;
 @Table(name = "validation_tokens")
 public class ValidationToken
 {
-	private enum TOKEN_TYPE {
+	public enum TOKEN_TYPE {
 		REGISTER, CHANGE_PASSWORD, REMOVE_ACCOUNT
 	};
 	
@@ -27,6 +25,15 @@ public class ValidationToken
 		this.token = token;
 		this.user = user;
 		this.expirationDate = calculateExpirationDate();
+		this.tokenType = TOKEN_TYPE.REGISTER;
+	}
+	
+	public ValidationToken(String token, User user, TOKEN_TYPE tokenType)
+	{
+		this.token = token;
+		this.user = user;
+		this.expirationDate = calculateExpirationDate();
+		this.tokenType = tokenType;
 	}
 	
 	@Id
@@ -47,7 +54,7 @@ public class ValidationToken
 	
 	@Column(name = "type")
 	@Enumerated(EnumType.STRING)
-	private TOKEN_TYPE token_type = TOKEN_TYPE.REGISTER;
+	private TOKEN_TYPE tokenType;
 	
 	public Date calculateExpirationDate()
 	{
@@ -103,13 +110,13 @@ public class ValidationToken
 		this.expirationDate = expirationDate;
 	}
 	
-	public TOKEN_TYPE getToken_type()
+	public TOKEN_TYPE getTokenType()
 	{
-		return token_type;
+		return tokenType;
 	}
 	
-	public void setToken_type(TOKEN_TYPE token_type)
+	public void setTokenType(TOKEN_TYPE token_type)
 	{
-		this.token_type = token_type;
+		this.tokenType = token_type;
 	}
 }

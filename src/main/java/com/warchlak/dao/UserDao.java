@@ -95,22 +95,28 @@ public class UserDao implements UserDaoInterface
 	@Override
 	public void updateUserToken(String username, String token)
 	{
+		updateUserToken(username, token, ValidationToken.TOKEN_TYPE.REGISTER);
+	}
+	
+	@Override
+	public void updateUserToken(String username, String token, ValidationToken.TOKEN_TYPE tokenType)
+	{
 		Session session = sessionFactory.getCurrentSession();
 		Query<ValidationToken> query = session.createQuery("FROM ValidationToken where user.username=:username",
 				ValidationToken.class);
 		query.setParameter("username", username);
-		ValidationToken validationToken = query.getResultList().get(0);
 		
-		if (validationToken != null)
+		if (!query.getResultList().isEmpty())
 		{
+			ValidationToken validationToken = query.getResultList().get(0);
+			
 			validationToken.setToken(token);
+			validationToken.setTokenType(tokenType);
 			validationToken.setExpirationDate(validationToken.calculateExpirationDate());
 		}
 		else
 		{
 			throw new ResourceNotFoundException("No validation token for given user found");
 		}
-		
 	}
-	
 }

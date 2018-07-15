@@ -3,17 +3,17 @@ package com.warchlak.events;
 import com.warchlak.entity.User;
 import org.springframework.context.ApplicationEvent;
 
-public class UserTokenResendRequestEvent extends ApplicationEvent implements UserDrivenEvent
+public class UserPasswordChangeEvent extends ApplicationEvent implements UserDrivenEvent
 {
 	private User user;
 	private String applicationUrl;
 	private String token;
 	
-	public UserTokenResendRequestEvent(Object source, String token, String applicationUrl)
+	public UserPasswordChangeEvent(Object source,String token, String applicationUrl)
 	{
 		super(source);
-		this.token = token;
 		this.user = (User) source;
+		this.token = token;
 		this.applicationUrl = applicationUrl;
 	}
 	
@@ -37,6 +37,7 @@ public class UserTokenResendRequestEvent extends ApplicationEvent implements Use
 		this.applicationUrl = applicationUrl;
 	}
 	
+	@Override
 	public String getToken()
 	{
 		return token;

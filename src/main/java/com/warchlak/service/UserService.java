@@ -4,6 +4,7 @@ import com.warchlak.DTO.UserDTO;
 import com.warchlak.dao.UserDaoInterface;
 import com.warchlak.entity.User;
 import com.warchlak.entity.ValidationToken;
+import com.warchlak.events.UserPasswordChangeEvent;
 import com.warchlak.events.UserRegistrationEvent;
 import com.warchlak.events.UserTokenResendRequestEvent;
 import com.warchlak.exceptionHandling.ResourceNotFoundException;
@@ -11,7 +12,6 @@ import com.warchlak.exceptionHandling.UserAlreadyExistsException;
 import com.warchlak.factory.UserFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,19 +22,15 @@ import javax.annotation.Resource;
 public class UserService implements UserServiceInterface
 {
 	final private
-	JavaMailSender mailSender;
-	
-	final private
 	ApplicationEventPublisher eventPublisher;
 	
 	@Resource(name = "userDAO")
 	private final UserDaoInterface userDao;
 	
 	@Autowired
-	public UserService(UserDaoInterface userDao, JavaMailSender mailSender, ApplicationEventPublisher eventPublisher)
+	public UserService(UserDaoInterface userDao, ApplicationEventPublisher eventPublisher)
 	{
 		this.userDao = userDao;
-		this.mailSender = mailSender;
 		this.eventPublisher = eventPublisher;
 	}
 	
@@ -105,7 +101,7 @@ public class UserService implements UserServiceInterface
 	}
 	
 	@Override
-	public void updateUserToken(String userEmail, String token, String applicationUrl)
+	public void updateUserToken(String userEmail, String token)
 	{
 		User user;
 		if ((user = getUserByEmail(userEmail)) != null)
@@ -119,9 +115,22 @@ public class UserService implements UserServiceInterface
 	}
 	
 	@Override
-	public void sendPasswordChangeConfirmationLink(User user, String applicationUrl)
+	public void updateUserToken(User user, String newToken, ValidationToken.TOKEN_TYPE tokenType)
 	{
-//		eventPublisher.publishEvent(new UserPasswordChangeEvent(user, applicationUrl));
+		try
+		{
+			userDao.updateUserToken(user.getUsername(), newToken, tokenType);
+		} catch (ResourceNotFoundException e)
+		{
+			ValidationToken validationToken = new ValidationToken(newToken,user,tokenType);
+			userDao.saveToken(validationToken);
+		}
+	}
+	
+	@Override
+	public void sendPasswordChangeConfirmationLink(User user, String token, String applicationUrl)
+	{
+		eventPublisher.publishEvent(new UserPasswordChangeEvent(user, token, applicationUrl));
 	}
 	
 	@Override

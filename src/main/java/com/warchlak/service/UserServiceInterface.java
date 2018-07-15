@@ -18,11 +18,13 @@ public interface UserServiceInterface
 	
 	ValidationToken getValidationToken(String token);
 	
-	void updateUserToken(String userEmail, String token, String applicationUrl);
+	void updateUserToken(String userEmail, String token);
 	
 	void registerUser(UserDTO userDTO, String applicationUrl);
 	
-	void sendPasswordChangeConfirmationLink(User user, String applicationUrl);
+	void sendPasswordChangeConfirmationLink(User user,String token, String applicationUrl);
 	
 	void resendUserToken(User user,String token, String applicationUrl);
+	
+	void updateUserToken(User user, String newToken, ValidationToken.TOKEN_TYPE tokenType);
 }

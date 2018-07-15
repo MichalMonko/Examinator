@@ -12,4 +12,6 @@ public interface UserDaoInterface
 	
 	ValidationToken getValidationToken(String token);
 	void updateUserToken(String username, String token );
+	
+	void updateUserToken(String username, String newToken, ValidationToken.TOKEN_TYPE changePassword);
 }

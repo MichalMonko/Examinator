@@ -1,5 +1,7 @@
 package com.warchlak.messages;
 
+import com.warchlak.entity.User;
+import com.warchlak.events.UserDrivenEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
@@ -47,6 +49,19 @@ public abstract class EmailMessageBuilder
 		mailMessage.setTo(recipientEmail);
 		
 		return mailMessage;
+	}
+	
+	public void populateBuilderFields(UserDrivenEvent event)
+	{
+		User user = event.getUser();
+		
+		String recipientEmail = user.getEmail();
+		String applicationUrl = event.getApplicationUrl();
+		String token = event.getToken();
+		
+		this.applicationUrl = applicationUrl;
+		this.recipientEmail = recipientEmail;
+		this.token = token;
 	}
 	
 }

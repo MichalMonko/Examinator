@@ -107,6 +107,10 @@ public class SecurityController
 		{
 			model.addAttribute("errorMessage", messageSource.getMessage("error.registered.invalidToken"));
 		}
+		else if (validationToken.getTokenType() != ValidationToken.TOKEN_TYPE.REGISTER)
+		{
+			model.addAttribute("errorMessage", messageSource.getMessage("error.registered.invalidTokenType"));
+		}
 		else
 		{
 			
@@ -154,7 +158,7 @@ public class SecurityController
 		}
 		else if (user.isEnabled())
 		{
-			model.addAttribute("errorMessage", "error.registered.userAlreadyActive");
+			model.addAttribute("errorMessage", messageSource.getMessage("error.registered.userAlreadyActive"));
 		}
 		else
 		{
@@ -162,7 +166,7 @@ public class SecurityController
 			{
 				String applicationUrl = request.getContextPath();
 				String newToken = UUID.randomUUID().toString();
-				userService.updateUserToken(email, newToken, applicationUrl);
+				userService.updateUserToken(email, newToken);
 				userService.resendUserToken(user, newToken, applicationUrl);
 				
 				model.addAttribute("success", true);
@@ -211,14 +215,16 @@ public class SecurityController
 				}
 				
 				String applicationUrl = request.getContextPath();
-				userService.sendPasswordChangeConfirmationLink(user, applicationUrl);
+				String newToken = UUID.randomUUID().toString();
+				
+				userService.updateUserToken(user, newToken, ValidationToken.TOKEN_TYPE.CHANGE_PASSWORD);
+				userService.sendPasswordChangeConfirmationLink(user, newToken, applicationUrl);
 				
 				model.addAttribute("successMessage", messageSource.getMessage("success.passwordChangedEmailSent"));
 			} catch (Exception e)
 			{
 				model.addAttribute("errorMessage", messageSource.getMessage("error.changePasswordErrorOther"));
 			}
-			// TODO: send confirmation email
 		}
 		return new ModelAndView("accountPage", model);
 	}
@@ -232,7 +238,7 @@ public class SecurityController
 		return new ModelAndView("accountPage", model);
 	}
 	
-	@PostMapping("/changePassword/{token}")
+	@RequestMapping("/changePassword/{token}")
 	public ModelAndView changePassword(@PathVariable("token") String token,
 	                                   ModelMap model)
 	{
@@ -240,7 +246,7 @@ public class SecurityController
 		return new ModelAndView();
 	}
 	
-	@PostMapping("/removeUser/{token}")
+	@RequestMapping("/removeUser/{token}")
 	public ModelAndView removeUser(@PathVariable("token") String token,
 	                               ModelMap model)
 	{
