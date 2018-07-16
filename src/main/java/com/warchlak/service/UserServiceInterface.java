@@ -32,4 +32,6 @@ public interface UserServiceInterface
 	void saveUserPendingPassword(User user, String newPassword);
 	
 	UserPendingPassword getUserPendingPassword(User user);
+	
+	void sendAccountRemovalConfirmationEmail(User user, String newToken, String applicationUrl);
 }

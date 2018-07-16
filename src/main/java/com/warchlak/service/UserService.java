@@ -5,6 +5,7 @@ import com.warchlak.dao.UserDaoInterface;
 import com.warchlak.entity.User;
 import com.warchlak.entity.UserPendingPassword;
 import com.warchlak.entity.ValidationToken;
+import com.warchlak.events.UserAccountRemovalEvent;
 import com.warchlak.events.UserPasswordChangeEvent;
 import com.warchlak.events.UserRegistrationEvent;
 import com.warchlak.events.UserTokenResendRequestEvent;
@@ -133,6 +134,12 @@ public class UserService implements UserServiceInterface
 	public void sendPasswordChangeConfirmationLink(User user, String token, String applicationUrl)
 	{
 		eventPublisher.publishEvent(new UserPasswordChangeEvent(user, token, applicationUrl));
+	}
+	
+	@Override
+	public void sendAccountRemovalConfirmationEmail(User user, String newToken, String applicationUrl)
+	{
+		eventPublisher.publishEvent(new UserAccountRemovalEvent(user, newToken,applicationUrl));
 	}
 	
 	@Override

@@ -232,11 +232,28 @@ public class SecurityController
 	}
 	
 	@PostMapping("/removeUser")
-	public ModelAndView sendRemoveUserLink(ModelMap model)
+	public ModelAndView sendRemoveUserLink(ModelMap model, HttpServletRequest request)
 	{
 		User user = userService.getUserByUsername(AuthenticationTracker.getLoggedUsername());
-		//TODO: send confirmation email
+		if (user == null)
+		{
+			model.addAttribute("errorMessage", messageSource.getMessage("error.userNotFound"));
+			return new ModelAndView("accountPage", model);
+		}
 		
+		try
+		{
+			String applicationUrl = request.getContextPath();
+			String newToken = UUID.randomUUID().toString();
+			
+			userService.updateUserToken(user, newToken, ValidationToken.TOKEN_TYPE.REMOVE_ACCOUNT);
+			userService.sendAccountRemovalConfirmationEmail(user, newToken, applicationUrl);
+			model.addAttribute("successMessage", messageSource.getMessage("success.userAccountRemovalEmailSent"));
+			
+		} catch (Exception e)
+		{
+			model.addAttribute("errorMessage", messageSource.getMessage("error.userRemoveOther"));
+		}
 		return new ModelAndView("accountPage", model);
 	}
 	

@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserPasswordChangeListener implements ApplicationListener<UserPasswordChangeEvent>
 {
-	final
+	final private
 	JavaMailSender emailSender;
 	
-	final
+	final private
 	UserPasswordChangeMessageBuilder messageBuilder;
 	
 	@Autowired
