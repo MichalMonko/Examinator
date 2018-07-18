@@ -21,7 +21,7 @@
 <body style="padding-top: 100px" class="bg-dark">
 
 
-<%@include file="navbar.jsp"%>
+<%@include file="navbar.jsp" %>
 
 <c:url value="/authentication/login" var="loginUrl"/>
 
@@ -30,7 +30,6 @@
 
         <c:if test="${param.error != null}">
             <div class="row">
-
                 <div class="col-sm-4"></div>
                 <div class="col-sm-4">
                     <div class="alert alert-danger">
@@ -41,6 +40,32 @@
             </div>
         </c:if>
 
+        <c:if test="${errorMessage != null}">
+            <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                    <div class="alert alert-danger">
+                        <strong>Błąd formularza! </strong>
+                            ${errorMessage}
+                    </div>
+                </div>
+                <div class="col-sm-4"></div>
+            </div>
+        </c:if>
+
+
+        <c:if test="${successMessage != null}">
+            <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                    <div class="alert alert-success">
+                        <strong>Sukces! </strong>
+                            ${successMessage}
+                    </div>
+                </div>
+                <div class="col-sm-4"></div>
+            </div>
+        </c:if>
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">

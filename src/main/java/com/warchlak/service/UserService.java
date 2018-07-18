@@ -53,6 +53,12 @@ public class UserService implements UserServiceInterface
 	}
 	
 	@Override
+	public void removeUser(User user)
+	{
+		userDao.removeUser(user);
+	}
+	
+	@Override
 	public User getUserByEmail(String email)
 	{
 		return userDao.getUserByEmail(email);

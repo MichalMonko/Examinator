@@ -32,6 +32,13 @@ public class UserDao implements UserDaoInterface
 	}
 	
 	@Override
+	public void removeUser(User user)
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.remove(user);
+	}
+	
+	@Override
 	public void saveToken(ValidationToken validationToken)
 	{
 		Session session = sessionFactory.getCurrentSession();

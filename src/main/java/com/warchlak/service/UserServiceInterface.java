@@ -34,4 +34,7 @@ public interface UserServiceInterface
 	UserPendingPassword getUserPendingPassword(User user);
 	
 	void sendAccountRemovalConfirmationEmail(User user, String newToken, String applicationUrl);
+	
+	void removeUser(User user);
+	
 }

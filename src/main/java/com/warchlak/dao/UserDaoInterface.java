@@ -19,4 +19,7 @@ public interface UserDaoInterface
 	void savePendingPassword(UserPendingPassword pendingPassword);
 	
 	UserPendingPassword getUserPendingPassword(String username);
+	
+	void removeUser(User user);
+	
 }

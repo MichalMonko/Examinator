@@ -60,7 +60,7 @@ public class SecurityController
 	
 	@RequestMapping("/signUp")
 	public String showSignupPage(@ModelAttribute("userDTO") UserDTO userDTO,
-	                             @RequestParam(name = "error", required = false) String errorMessage)
+	                             @RequestParam(value = "errorMessage", required = false) String errorMessage)
 	{
 		return "signupPage";
 	}
@@ -286,8 +286,29 @@ public class SecurityController
 	public ModelAndView removeUser(@PathVariable("token") String token,
 	                               ModelMap model)
 	{
-		//TODO: Remove User if token valid
-		return new ModelAndView();
+		ValidationToken validationToken = userService.getValidationToken(token);
+		if (validationToken == null)
+		{
+			model.addAttribute("errorMessage", messageSource.getMessage("error.invalidToken"));
+		}
+		else if (validationToken.getTokenType() != ValidationToken.TOKEN_TYPE.REMOVE_ACCOUNT)
+		{
+			model.addAttribute("errorMessage", messageSource.getMessage("error.invalidTokenType"));
+		}
+		else
+		{
+			try
+			{
+				User user = validationToken.getUser();
+				userService.removeUser(user);
+				model.addAttribute("successMessage", messageSource.getMessage("success.userRemoval"));
+			} catch (Exception e)
+			{
+				model.addAttribute("errorMessage", messageSource.getMessage("error.userRemoveOther"));
+			}
+		}
+		
+		return new ModelAndView("loginPage", model);
 	}
 	
 	private String determineUserRole(Collection<? extends GrantedAuthority> userRoles)
