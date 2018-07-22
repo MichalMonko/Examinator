@@ -32,7 +32,7 @@
 <security:authorize access="isAuthenticated()" var="loggedIn"/>
 <form:form id="logout_form" method="post" action="/logout"/>
 
-<%@include file="navbar.jsp"%>
+<%@include file="navbar.jsp" %>
 
 <div class="container-fluid text-white text-center">
 
@@ -44,9 +44,19 @@
             <br>
             <c:forEach var="question" items="${course.questions}">
 
-                <button class="btn btn-block btn-primary" data-toggle="collapse" data-target="#answers_${question.id}">
-                        ${question.content}
-                </button>
+
+                <div class="btn-group" role="group" style="width:100%">
+                    <button class="btn btn-primary" style="width:95%;" data-toggle="collapse"
+                            data-target="#answers_${question.id}">
+                            ${question.content}
+                    </button>
+                    <form:form action="/question/showEditQuestionForm/${question.id}" method="POST">
+                        <button type="submit" class="btn btn-outline-light" style="width:5%"><span
+                                class="glyphicon glyphicon-pencil">
+                    </span></button>
+                    </form:form>
+                </div>
+                <br>
 
                 <div id="answers_${question.id}" class="collapse">
 

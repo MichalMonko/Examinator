@@ -45,6 +45,19 @@ public class QuestionController
 		return new ModelAndView("addQuestionForm", model);
 	}
 	
+	@PostMapping(value = "/showEditQuestionForm/{questionId}")
+	public ModelAndView showEditQuestionForm(ModelMap model, @PathVariable("questionId") int questionId)
+	{
+		Question question = questionService.getQuestion(questionId);
+		Course course = question.getCourse();
+		
+		model.addAttribute("question", question).addAttribute("course", course)
+		     .addAttribute("courseId", course.getId());
+		
+		return new ModelAndView("addQuestionForm", model);
+	}
+	
+	
 	@RequestMapping("/showAddFiles")
 	public ModelAndView showAddQuestionFiles(ModelMap model, @ModelAttribute("courseId") int courseId)
 	{
@@ -75,11 +88,10 @@ public class QuestionController
 			List<Answer> answers = new ArrayList<>();
 			
 			int counter = 0;
-			boolean correct = false;
 			
 			for (String answerString : answerRequestItem)
 			{
-				correct = (isCorrectItems[counter].equals("1"));
+				boolean correct = (isCorrectItems[counter].equals("1"));
 				
 				Answer answer = new Answer();
 				answer.setContent(answerString);

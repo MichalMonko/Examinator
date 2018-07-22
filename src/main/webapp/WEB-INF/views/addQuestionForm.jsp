@@ -85,7 +85,7 @@
                     <br>
                     <div class="input-group">
                         <textarea name="answer" class="form-control" form="question_add_form" rows="5"></textarea>
-                        <span class="input-group-addon btn btn-defalut"
+                        <span class="input-group-addon btn btn-default"
                               style="background-color: lightcoral;" id="0button" onclick="switchValues(this)"></span>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
                     <br>
                     <div class="input-group">
                         <textarea name="answer" class="form-control" form="question_add_form" rows="5"></textarea>
-                        <span class="input-group-addon btn btn-defalut"
+                        <span class="input-group-addon btn btn-default"
                               style="background-color: lightcoral;" id="1button" onclick="switchValues(this)"></span>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                     <br>
                     <div class="input-group">
                         <textarea name="answer" class="form-control" form="question_add_form" rows="5"></textarea>
-                        <span class="input-group-addon btn btn-defalut"
+                        <span class="input-group-addon btn btn-default"
                               style="background-color: lightcoral;" id="2button" onclick="switchValues(this)"></span>
                     </div>
                 </div>
@@ -117,7 +117,7 @@
                     <br>
                     <div class="input-group">
                         <textarea name="answer" class="form-control" form="question_add_form" rows="5"></textarea>
-                        <span class="input-group-addon btn btn-defalut"
+                        <span class="input-group-addon btn btn-default"
                               style="background-color: lightcoral;" id="3button" onclick="switchValues(this)"></span>
                     </div>
                 </div>
