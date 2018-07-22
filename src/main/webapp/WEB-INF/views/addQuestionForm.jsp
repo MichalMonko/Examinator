@@ -38,7 +38,7 @@
 <security:authorize access="isAuthenticated()" var="loggedIn"/>
 <form:form id="logout_form" method="post" action="/logout"/>
 
-<%@include file="navbar.jsp"%>
+<%@include file="navbar.jsp" %>
 
 
 <div class="container-fluid bg-dark text-white">
@@ -62,66 +62,124 @@
                 </c:otherwise>
             </c:choose>
 
-            <form:form id="question_add_form" action="question/add" method="post" modelAttribute="question">
+            <form:form id="question_add_form" action="/question/add" method="post" modelAttribute="question">
 
                 <input type="hidden" name="courseId" value="${courseId}">
 
 
-                <div id="correctValues">
-                    <input type="hidden" name="correct" value="0">
-                    <input type="hidden" name="correct" value="0">
-                    <input type="hidden" name="correct" value="0">
-                    <input type="hidden" name="correct" value="0">
-                </div>
+                <c:if test="${question != null}">
+                    <input type="hidden" name="id" value="${question.id}">
+                    <div id="correctValues">
+                        <c:forEach var="answer" items="${question.answers}">
+                            <c:choose>
+                                <c:when test="${answer.correct == true}">
+                                    <c:set var="isCorrect" value="1"/>
+                                </c:when>
+
+                                <c:otherwise>
+                                    <c:set var="isCorrect" value="0"/>
+                                </c:otherwise>
+                            </c:choose>
+
+                            <input type="hidden" name="correct" value="${isCorrect}">
+                        </c:forEach>
+                    </div>
+                </c:if>
+
+                <c:if test="${question == null}">
+                    <div id="correctValues">
+                        <input type="hidden" name="correct" value="0">
+                        <input type="hidden" name="correct" value="0">
+                        <input type="hidden" name="correct" value="0">
+                        <input type="hidden" name="correct" value="0">
+                    </div>
+                </c:if>
 
 
                 <div class="form-group">
                     <label class="control-label">Pytanie:</label>
-                    <textarea name="content" rows="5" class="form-control" required></textarea>
+                    <textarea name="content" rows="5" class="form-control"
+                              required>${question.content}</textarea>
                 </div>
 
-                <div class="form-group">
-                    <label class="control-label">Odpowiedź A</label>
-                    <br>
-                    <div class="input-group">
-                        <textarea name="answer" class="form-control" form="question_add_form" rows="5"></textarea>
-                        <span class="input-group-addon btn btn-default"
-                              style="background-color: lightcoral;" id="0button" onclick="switchValues(this)"></span>
+
+                <c:if test="${question != null}">
+                    <c:set var="iteration" value="0"/>
+                    <c:forEach var="answer" items="${question.answers}">
+
+                        <c:choose>
+                            <c:when test="${answer.correct == true}">
+                                <c:set var="style" value="background-color: lightgreen;"/>
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="style" value="background-color: lightcoral;"/>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <div class="form-group">
+                            <label class="control-label">Odpowiedź: </label>
+                            <br>
+                            <div class="input-group">
+                            <textarea name="answer" class="form-control"
+                                      form="question_add_form" rows="5">${answer.content}</textarea>
+                                <span class="input-group-addon btn btn-default"
+                                      style="${style}" id="${iteration}button"
+                                      onclick="switchValues(this)"></span>
+                            </div>
+                        </div>
+
+                        <c:set var="iteration" value="${iteration+1}"/>
+
+                    </c:forEach>
+                </c:if>
+
+                <c:if test="${question == null}">
+                    <div class="form-group">
+                        <label class="control-label">Odpowiedź A</label>
+                        <br>
+                        <div class="input-group">
+                            <textarea name="answer" class="form-control" form="question_add_form" rows="5"></textarea>
+                            <span class="input-group-addon btn btn-default"
+                                  style="background-color: lightcoral;" id="0button"
+                                  onclick="switchValues(this)"></span>
+                        </div>
                     </div>
-                </div>
 
-
-                <div class="form-group">
-                    <label class="control-label">Odpowiedź B</label>
-                    <br>
-                    <div class="input-group">
-                        <textarea name="answer" class="form-control" form="question_add_form" rows="5"></textarea>
-                        <span class="input-group-addon btn btn-default"
-                              style="background-color: lightcoral;" id="1button" onclick="switchValues(this)"></span>
+                    <div class="form-group">
+                        <label class="control-label">Odpowiedź B</label>
+                        <br>
+                        <div class="input-group">
+                            <textarea name="answer" class="form-control" form="question_add_form" rows="5"></textarea>
+                            <span class="input-group-addon btn btn-default"
+                                  style="background-color: lightcoral;" id="1button"
+                                  onclick="switchValues(this)"></span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="control-label">Odpowiedź C</label>
-                    <br>
-                    <div class="input-group">
-                        <textarea name="answer" class="form-control" form="question_add_form" rows="5"></textarea>
-                        <span class="input-group-addon btn btn-default"
-                              style="background-color: lightcoral;" id="2button" onclick="switchValues(this)"></span>
+                    <div class="form-group">
+                        <label class="control-label">Odpowiedź C</label>
+                        <br>
+                        <div class="input-group">
+                            <textarea name="answer" class="form-control" form="question_add_form" rows="5"></textarea>
+                            <span class="input-group-addon btn btn-default"
+                                  style="background-color: lightcoral;" id="2button"
+                                  onclick="switchValues(this)"></span>
+                        </div>
                     </div>
-                </div>
 
 
-                <div class="form-group">
-                    <label class="control-label">Odpowiedź D</label>
-                    <br>
-                    <div class="input-group">
-                        <textarea name="answer" class="form-control" form="question_add_form" rows="5"></textarea>
-                        <span class="input-group-addon btn btn-default"
-                              style="background-color: lightcoral;" id="3button" onclick="switchValues(this)"></span>
+                    <div class="form-group">
+                        <label class="control-label">Odpowiedź D</label>
+                        <br>
+                        <div class="input-group">
+                            <textarea name="answer" class="form-control" form="question_add_form" rows="5"></textarea>
+                            <span class="input-group-addon btn btn-default"
+                                  style="background-color: lightcoral;" id="3button"
+                                  onclick="switchValues(this)"></span>
+                        </div>
                     </div>
-                </div>
 
+                </c:if>
 
                 <div class="form-group" id="submit_section">
                     <button id="add_question_button" type="button" class="btn btn-primary"
@@ -131,7 +189,7 @@
                 </div>
             </form:form>
         </div>
-<div class="col-3"></div>
+        <div class="col-3"></div>
     </div>
     <div class="row">
         <div class="col-sm-2"></div>

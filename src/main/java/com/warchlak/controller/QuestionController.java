@@ -28,14 +28,14 @@ public class QuestionController
 	
 	@RequestMapping(value = "/showAddForm")
 	public ModelAndView showAddQuestionForm(ModelMap model, @ModelAttribute("courseId") int courseId,
-	                                        @RequestParam(value = "questionId", defaultValue = "-1") int questionId,
-	                                        @ModelAttribute("question") Question question)
+	                                        @RequestParam(value = "questionId", defaultValue = "-1") int questionId
+	                                        )
 	{
 		Course course = questionService.getCourse(courseId);
 		
 		if (questionId != -1)
 		{
-			question = questionService.getQuestion(questionId);
+			Question question = questionService.getQuestion(questionId);
 			model.addAttribute("question", question);
 		}
 		
@@ -45,7 +45,7 @@ public class QuestionController
 		return new ModelAndView("addQuestionForm", model);
 	}
 	
-	@PostMapping(value = "/showEditQuestionForm/{questionId}")
+	@RequestMapping(value = "/showEditQuestionForm/{questionId}")
 	public ModelAndView showEditQuestionForm(ModelMap model, @PathVariable("questionId") int questionId)
 	{
 		Question question = questionService.getQuestion(questionId);
