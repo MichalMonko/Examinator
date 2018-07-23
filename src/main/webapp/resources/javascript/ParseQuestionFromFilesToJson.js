@@ -65,8 +65,8 @@ function readFile(file) {
 
         } catch (err) {
             fileStatusAlert.setAttribute("class", "alert alert-danger");
-            fileStatusAlert.innerHTML = "<strong>" + file.name + "<strong>" + "\tBłąd: " +
-                err.message +
+            fileStatusAlert.innerHTML = "<strong>Błąd!\t<strong>"+
+                err +
                 "<span class='glyphicon glyphicon-remove float-right'></span>";
         }
         finally {
@@ -83,8 +83,8 @@ function convertToObjects(text, file) {
     var answers = [];
 
     var answerLine = lines[0];
-    if (answerLine.charAt(0).toLowerCase() !== 'x') {
-        throw "Plik " + file.name + " ma niewłaściwy format!";
+    if (!checkFirstLineFormat(answerLine)) {
+        throw ("Plik " + file.name + " ma niewłaściwy format!");
     }
 
     var correctAnswers = [];
@@ -108,5 +108,25 @@ function convertToObjects(text, file) {
     }
 
     return {"content": questionLine, "answers": answers};
+}
+
+function checkFirstLineFormat(line) {
+    var characterNumber = line.toString().length - 1;
+
+    if (characterNumber === 0) {
+        return false;
+    }
+    if (line.charAt(0).toLowerCase() !== 'x') {
+        return false;
+    }
+
+    for (var i = 1; i < characterNumber; i++) {
+        var digit =  parseInt(line.toString().charAt(i), 10);
+        if (isNaN(digit)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
