@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: fff
@@ -45,18 +46,28 @@
             <c:forEach var="question" items="${course.questions}">
 
 
-                <div class="btn-group" role="group" style="width:100%">
-                    <button class="btn btn-primary" style="width:95%;" data-toggle="collapse"
+                <sec:authorize access="hasRole('ADMIN') or hasRole('CONTRIBUTOR')">
+                    <div class="btn-group" role="group" style="width:100%">
+                        <button class="btn btn-primary" style="width:95%;" data-toggle="collapse"
+                                data-target="#answers_${question.id}">
+                                ${question.content}
+                        </button>
+
+                        <form:form action="/question/showEditQuestionForm/${question.id}" method="POST">
+                            <button type="submit" class="btn btn-outline-light" style="width:5%"><span
+                                    class="glyphicon glyphicon-pencil">
+                    </span></button>
+                        </form:form>
+                    </div>
+                </sec:authorize>
+
+                <security:authorize access="hasRole('USER') or isAnonymous()">
+                    <button class="btn btn-block btn-primary" data-toggle="collapse"
                             data-target="#answers_${question.id}">
                             ${question.content}
                     </button>
-                    <form:form action="/question/showEditQuestionForm/${question.id}" method="POST">
-                        <button type="submit" class="btn btn-outline-light" style="width:5%"><span
-                                class="glyphicon glyphicon-pencil">
-                    </span></button>
-                    </form:form>
-                </div>
-                <br>
+                    <br>
+                </security:authorize>
 
                 <div id="answers_${question.id}" class="collapse">
 

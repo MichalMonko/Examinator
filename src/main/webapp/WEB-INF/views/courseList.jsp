@@ -29,7 +29,7 @@
 
     <title>Hello, world!</title>
 
-        <script type="text/javascript" src="/resources/javascript/logoutHandler.js"></script>
+    <script type="text/javascript" src="/resources/javascript/logoutHandler.js"></script>
 
 </head>
 
@@ -38,7 +38,7 @@
 <c:set var="loggedIn" value="<%=AuthenticationTracker.isAuthenticated()%>"/>
 <form:form id="logout_form" method="post" action="/logout"/>
 
-<%@include file="navbar.jsp"%>
+<%@include file="navbar.jsp" %>
 
 <div class="container-fluid bg-dark text-white">
     <div class="row">
@@ -46,8 +46,18 @@
         <div class="col-sm-6">
 
             <c:forEach var="major" items="${majors}">
+
+                <c:choose>
+                    <c:when test="${major.courses.size() == 0}">
+                        <c:set var="empty_prompt" value="[Brak kursów]"/>
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var="empty_prompt" value=""/>
+                    </c:otherwise>
+                </c:choose>
+
                 <a class="text-center text-white btn btn-primary btn-large btn-block"
-                   data-toggle="collapse" href="#${major.id}">${major.name}</a>
+                   data-toggle="collapse" href="#${major.id}">${major.name}     ${empty_prompt}</a>
 
                 <div id="${major.id}" class="collapse">
                     <c:forEach var="course" items="${major.courses}">
