@@ -1,7 +1,7 @@
 package com.warchlak.dao;
 
 import com.warchlak.entity.*;
-import com.warchlak.exceptionHandling.ResourceNotFoundException;
+import com.warchlak.exceptionHandling.Exception.ResourceNotFoundException;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

@@ -3,7 +3,7 @@ package com.warchlak.dao;
 import com.warchlak.entity.User;
 import com.warchlak.entity.UserPendingPassword;
 import com.warchlak.entity.ValidationToken;
-import com.warchlak.exceptionHandling.ResourceNotFoundException;
+import com.warchlak.exceptionHandling.Exception.ResourceNotFoundException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
