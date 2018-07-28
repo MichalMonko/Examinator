@@ -5,6 +5,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -14,10 +16,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 	
 	private final DataSource userDataSource;
 	
+	private AccessDeniedHandler customAccessDeniedHandler;
+	
 	@Autowired
-	public WebSecurityConfig(DataSource userDataSource)
+	public WebSecurityConfig(DataSource userDataSource, AccessDeniedHandler accessDeniedHandler)
 	{
 		this.userDataSource = userDataSource;
+		this.customAccessDeniedHandler = accessDeniedHandler;
 	}
 	
 	@Override
@@ -40,7 +45,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 		    .antMatchers("/authentication/account").access("hasAnyAuthority('ROLE_USER','ROLE_ADMIN','ROLE_CONTRIBUTOR')")
 		    .antMatchers("/question/**").access("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_CONTRIBUTOR')")
 		    .antMatchers("/resources/**").permitAll()
-		    .antMatchers("/api/**").permitAll()
+		    .requestMatchers(new AntPathRequestMatcher("/api/**", "GET")).permitAll()
+		    .requestMatchers(new AntPathRequestMatcher("/api/**", "POST"))
+		    .access("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_CONTRIBUTOR')")
+		    .requestMatchers(new AntPathRequestMatcher("/api/**", "DELETE"))
+		    .access("hasAuthority('ROLE_ADMIN')")
 		    .anyRequest()
 		    .authenticated()
 		    .and()
@@ -50,8 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 		    .and()
 		    .httpBasic()
 		    .and()
-		    .exceptionHandling()
-		    .accessDeniedPage("/authentication/denied")
+		    .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
 		    .and()
 		    .logout()
 		    .logoutSuccessUrl("/authentication/logoutSuccess")

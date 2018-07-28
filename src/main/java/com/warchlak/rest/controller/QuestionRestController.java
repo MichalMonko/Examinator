@@ -5,6 +5,8 @@ import com.warchlak.entity.Major;
 import com.warchlak.entity.Question;
 import com.warchlak.exceptionHandling.Exception.BindingErrorException;
 import com.warchlak.exceptionHandling.Exception.ResourceNotFoundException;
+import com.warchlak.exceptionHandling.Exception.UnathorizedAccessException;
+import com.warchlak.messages.CustomMessageSource;
 import com.warchlak.service.QuestionServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,10 +22,13 @@ public class QuestionRestController
 {
 	private final QuestionServiceInterface service;
 	
+	private final CustomMessageSource messageSource;
+	
 	@Autowired
-	public QuestionRestController(QuestionServiceInterface questionService)
+	public QuestionRestController(QuestionServiceInterface questionService, CustomMessageSource messageSource)
 	{
 		this.service = questionService;
+		this.messageSource = messageSource;
 	}
 	
 	@GetMapping("/majors")
@@ -71,5 +76,11 @@ public class QuestionRestController
 		Course course = service.saveQuestions(courseId, questions);
 		
 		return new ResponseEntity<>(course, HttpStatus.OK);
+	}
+	
+	@RequestMapping("/unauthorized_access")
+	private void throwUnauthorizedException()
+	{
+		throw new UnathorizedAccessException(messageSource.getMessage("error.401"));
 	}
 }
