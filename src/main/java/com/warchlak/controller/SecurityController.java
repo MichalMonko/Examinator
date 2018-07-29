@@ -5,7 +5,7 @@ import com.warchlak.config.security.AuthenticationTracker;
 import com.warchlak.entity.User;
 import com.warchlak.entity.UserPendingPassword;
 import com.warchlak.entity.ValidationToken;
-import com.warchlak.exceptionHandling.UserAlreadyExistsException;
+import com.warchlak.exceptionHandling.Exception.UserAlreadyExistsException;
 import com.warchlak.messages.CustomMessageSource;
 import com.warchlak.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
