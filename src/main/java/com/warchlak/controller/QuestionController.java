@@ -1,16 +1,23 @@
 package com.warchlak.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.warchlak.entity.Answer;
 import com.warchlak.entity.Course;
 import com.warchlak.entity.Question;
+import com.warchlak.messages.CustomMessageSource;
 import com.warchlak.service.QuestionServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +26,13 @@ import java.util.List;
 public class QuestionController
 {
 	private QuestionServiceInterface questionService;
+	private final CustomMessageSource messageSource;
 	
 	@Autowired
-	public QuestionController(QuestionServiceInterface questionService)
+	public QuestionController(QuestionServiceInterface questionService, CustomMessageSource messageSource)
 	{
 		this.questionService = questionService;
+		this.messageSource = messageSource;
 	}
 	
 	@RequestMapping(value = "/showAddForm")
@@ -110,5 +119,31 @@ public class QuestionController
 		}
 		
 		return new ModelAndView("addQuestionForm", model);
+	}
+	
+	@PostMapping("/addFromFiles")
+	public ModelAndView addFromFiles(ModelMap model, @ModelAttribute("questionsAsJson") String jsonString,
+	                                 @ModelAttribute("courseId") int courseId)
+	{
+		ObjectMapper objectMapper = new ObjectMapper();
+		try
+		{
+			List<Question> questions = objectMapper.readValue(jsonString, new TypeReference<List<Question>>()
+			{
+			});
+			
+			questionService.saveQuestions(courseId, questions);
+			
+			model.addAttribute("successMessage", messageSource.getMessage("success.questionsAdded"));
+			
+		} catch (IOException e)
+		{
+			model.addAttribute("errorMessage", messageSource.getMessage("error.invalidJsonData"));
+		} catch (Exception e)
+		{
+			model.addAttribute("errorMessage", messageSource.getMessage("error.other"));
+		}
+		
+		return new ModelAndView("ReadQuestionsFromFiles", model);
 	}
 }
