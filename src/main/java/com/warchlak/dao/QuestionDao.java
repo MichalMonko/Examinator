@@ -102,8 +102,6 @@ public class QuestionDao implements QuestionDaoInterface
 		Hibernate.initialize(course.getQuestions());
 		course.getQuestions().addAll(questions);
 		
-		System.out.println(course.getId());
-		
 		session.saveOrUpdate(course);
 		return course;
 	}

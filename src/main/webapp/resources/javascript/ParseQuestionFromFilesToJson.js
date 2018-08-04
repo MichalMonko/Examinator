@@ -34,6 +34,7 @@ var counter;
 //     }
 // }
 
+
 var submitButton = document.getElementById("addFilesButton");
 submitButton.addEventListener("click", function () {
     submitForm()
@@ -46,6 +47,7 @@ function appendJsonToForm() {
 }
 
 function submitForm() {
+    appendJsonToForm();
     var form = document.getElementById("jsonAddForm");
     form.submit();
 }
@@ -61,8 +63,6 @@ function readFiles() {
     for (var i = 0; i < numOfFiles; i++) {
         readFile(filelist[i]);
     }
-
-    appendJsonToForm();
 }
 
 function readFile(file) {
@@ -93,7 +93,7 @@ function readFile(file) {
             counter--;
         }
     };
-    reader.readAsText(file, "cp1250");
+    reader.readAsText(file,"cp1250");
 }
 
 function convertToObjects(text, file) {
@@ -147,4 +147,9 @@ function checkFirstLineFormat(line) {
 
     return true;
 }
+
+
+
+
+
 

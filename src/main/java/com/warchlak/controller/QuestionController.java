@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +124,7 @@ public class QuestionController
 	
 	@PostMapping("/addFromFiles")
 	public ModelAndView addFromFiles(ModelMap model, @ModelAttribute("questionsAsJson") String jsonString,
-	                                 @ModelAttribute("courseId") int courseId)
+	                                 @ModelAttribute("courseId") int courseId, HttpServletRequest request)
 	{
 		ObjectMapper objectMapper = new ObjectMapper();
 		try

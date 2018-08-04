@@ -8,7 +8,6 @@
 
 <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
@@ -32,7 +31,6 @@
 <%@include file="navbar.jsp" %>
 
 <div class="container-fluid bg-dark text-white">
-
     <div class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4">
@@ -71,7 +69,8 @@
     <div class="row">
         <div class="col-2"></div>
         <div class="col-lg-8">
-            <form:form modelAttribute="questionsAsJson" action="/question/addFromFiles" id="jsonAddForm">
+            <form:form modelAttribute="questionsAsJson" action="/question/addFromFiles" id="jsonAddForm"
+                       acceptCharset="UTF-8">
                 <input type="hidden" id="jsonData" name="questionsAsJson" value="">
                 <input type="hidden" id="courseId" name="courseId" value="${courseId}">
             </form:form>
