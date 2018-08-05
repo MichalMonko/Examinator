@@ -1,40 +1,6 @@
 var questions = [];
 var counter;
 
-// function sendFiles() {
-//     var courseId = document.getElementById("courseId").value;
-//     if (counter > 0) {
-//
-//     }
-//
-//     var xhttp = new XMLHttpRequest();
-//     xhttp.open("POST", "/api/questions/" + courseId, true);
-//     xhttp.setRequestHeader("Content-type", "application/json");
-//     xhttp.send(JSON.stringify(questions));
-//
-//     xhttp.onreadystatechange = function () {
-//         if (xhttp.readyState === 4) {
-//
-//             var alertDiv = document.getElementById("successIndicator");
-//
-//             if (xhttp.status === 200) {
-//                 alertDiv.innerHTML = " <strong>Sukces! </strong>" + "Z powodzeniem dodano pytania do kursu: " +
-//                     JSON.parse(this.responseText).name;
-//                 alertDiv.setAttribute("class", "alert alert-success");
-//                 alertDiv.setAttribute("role", "alert");
-//             }
-//             else {
-//                 alertDiv.innerHTML = " <strong>Niepowodzenie! </strong>" + "Wystąpił błąd przy dodawaniu pytań: "
-//                     + JSON.parse(this.responseText).message;
-//
-//                 alertDiv.setAttribute("class", "alert alert-danger");
-//                 alertDiv.setAttribute("role", "alert");
-//             }
-//         }
-//     }
-// }
-
-
 var submitButton = document.getElementById("addFilesButton");
 submitButton.addEventListener("click", function () {
     submitForm()
@@ -43,7 +9,11 @@ submitButton.addEventListener("click", function () {
 function appendJsonToForm() {
     var jsonData = JSON.stringify(questions);
     var jsonFormInput = document.getElementById("jsonData");
-    jsonFormInput.value = jsonData;
+    var encoded = encodeURI(jsonData);
+    console.log(encoded);
+    var decoded = decodeURI(encoded);
+    console.log(decoded);
+    jsonFormInput.value = encoded;
 }
 
 function submitForm() {
@@ -93,7 +63,7 @@ function readFile(file) {
             counter--;
         }
     };
-    reader.readAsText(file,"cp1250");
+    reader.readAsText(file, "cp1250");
 }
 
 function convertToObjects(text, file) {

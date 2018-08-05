@@ -10,15 +10,12 @@ import com.warchlak.service.QuestionServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,12 +121,13 @@ public class QuestionController
 	
 	@PostMapping("/addFromFiles")
 	public ModelAndView addFromFiles(ModelMap model, @ModelAttribute("questionsAsJson") String jsonString,
-	                                 @ModelAttribute("courseId") int courseId, HttpServletRequest request)
+	                                 @ModelAttribute("courseId") int courseId)
 	{
 		ObjectMapper objectMapper = new ObjectMapper();
 		try
 		{
-			List<Question> questions = objectMapper.readValue(jsonString, new TypeReference<List<Question>>()
+			String decodedJsonString = URLDecoder.decode(jsonString, "UTF-8");
+			List<Question> questions = objectMapper.readValue(decodedJsonString, new TypeReference<List<Question>>()
 			{
 			});
 			
@@ -147,4 +145,31 @@ public class QuestionController
 		
 		return new ModelAndView("ReadQuestionsFromFiles", model);
 	}
+	
+	@ModelAttribute
+	@GetMapping("/quiz/{courseId}")
+	public ModelAndView showQuiz(ModelMap model, @PathVariable("courseId") int courseId)
+	{
+		try
+		{
+			Course course = questionService.getCourseWithQuestions(courseId);
+			
+			List<Question> questions = course.getQuestions();
+			model.addAttribute(questions);
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			
+			String jsonString;
+			jsonString = objectMapper.writeValueAsString(questions);
+			jsonString = jsonString.replace("'", "");
+			model.addAttribute("jsonString", jsonString);
+		} catch (Exception e)
+		{
+			model.addAttribute("errorMessage", messageSource.getMessage("error.json.writing"));
+		}
+		
+		return new ModelAndView("quizPage", model);
+	}
+	
+	
 }

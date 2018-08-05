@@ -63,6 +63,9 @@
                             <c:param name="courseId" value="${course.id}"/>
                         </c:url>
 
+                        <c:url var="showQuiz" value="/question/quiz/">
+                        </c:url>
+
                         <div class="dropdown">
                             <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
                                data-toggle="dropdown">${course.name}<span class="caret"></span></a>
@@ -80,6 +83,10 @@
                                 <li>
                                     <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
                                        href="${showQuestions}">Wyświetl pytania</a>
+
+                                    <li>
+                                        <a class="text-center text-white btn btn-default btn-large btn-block bg-light text-dark "
+                                           href="${showQuiz}${course.id}">Wyświetl Quiz</a>
                             </ul>
                         </div>
                     </c:forEach>
