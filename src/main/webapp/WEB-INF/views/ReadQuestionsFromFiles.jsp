@@ -8,7 +8,6 @@
 
 <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
@@ -21,7 +20,6 @@
 
     <title>Hello, world!</title>
 
-    <script type="text/javascript" src="/resources/javascript/ParseQuestionFromFilesToJson.js"></script>
     <script type="text/javascript" src="/resources/javascript/logoutHandler.js"></script>
 </head>
 
@@ -30,11 +28,28 @@
 <security:authorize access="isAuthenticated()" var="loggedIn"/>
 <form:form id="logout_form" method="post" action="/logout"/>
 
-<%@include file="navbar.jsp"%>
+<%@include file="navbar.jsp" %>
 
 <div class="container-fluid bg-dark text-white">
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <c:if test="${errorMessage != null}">
+                <div class="alert alert-danger">
+                    <strong>Błąd formularza! </strong>
+                        ${errorMessage}
+                </div>
+            </c:if>
 
-    <input type="hidden" id="courseId" value="${courseId}">
+            <c:if test="${successMessage != null}">
+                <div class="alert alert-success">
+                    <strong>Sukces! </strong>
+                        ${successMessage}
+                </div>
+            </c:if>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
 
     <div class="row">
         <div class="col-2"></div>
@@ -42,9 +57,8 @@
             <h2>Kurs: ${course.name}</h2>
             <br>
 
-            <div id="successIndicator"></div>
-
-            <label class="btn btn-default btn-block btn-lg text-center " for="file_input"><br><br><h4>Wybierz pliki</h4><br>
+            <label class="btn btn-default btn-block btn-lg text-center " for="file_input"><br><br><h4>Wybierz pliki</h4>
+                <br>
                 <input type="file" class="custom-file-input" id="file_input" multiple onchange="readFiles()">
             </label>
             <br>
@@ -55,7 +69,12 @@
     <div class="row">
         <div class="col-2"></div>
         <div class="col-lg-8">
-            <div class="btn btn-primary btn-lg" onclick="sendFiles();">Dodaj pliki</div>
+            <form:form modelAttribute="questionsAsJson" action="/question/addFromFiles" id="jsonAddForm"
+                       acceptCharset="UTF-8">
+                <input type="hidden" id="jsonData" name="questionsAsJson" value="">
+                <input type="hidden" id="courseId" name="courseId" value="${courseId}">
+            </form:form>
+            <div class="btn btn-primary btn-lg" id="addFilesButton">Dodaj pliki</div>
             <div class="float-right">
                 <a href="/showCoursesList" class="btn btn-info">
                     <span class="glyphicon glyphicon-arrow-left"></span> Powrót do listy
@@ -85,6 +104,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
         integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
         crossorigin="anonymous"></script>
+<script type="text/javascript" src="/resources/javascript/ParseQuestionFromFilesToJson.js"></script>
 </body>
 
 </html>

@@ -1,37 +1,25 @@
 var questions = [];
 var counter;
 
-function sendFiles() {
-    var courseId = document.getElementById("courseId").value;
-    if (counter > 0) {
+var submitButton = document.getElementById("addFilesButton");
+submitButton.addEventListener("click", function () {
+    submitForm()
+});
 
-    }
+function appendJsonToForm() {
+    var jsonData = JSON.stringify(questions);
+    var jsonFormInput = document.getElementById("jsonData");
+    var encoded = encodeURI(jsonData);
+    console.log(encoded);
+    var decoded = decodeURI(encoded);
+    console.log(decoded);
+    jsonFormInput.value = encoded;
+}
 
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/api/questions/" + courseId, true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify(questions));
-
-    xhttp.onreadystatechange = function () {
-        if (xhttp.readyState === 4) {
-
-            var alertDiv = document.getElementById("successIndicator");
-
-            if (xhttp.status === 200) {
-                alertDiv.innerHTML = " <strong>Sukces! </strong>" + "Z powodzeniem dodano pytania do kursu: " +
-                    JSON.parse(this.responseText).name;
-                alertDiv.setAttribute("class", "alert alert-success");
-                alertDiv.setAttribute("role", "alert");
-            }
-            else {
-                alertDiv.innerHTML = " <strong>Niepowodzenie! </strong>" + "Wystąpił błąd przy dodawaniu pytań: "
-                    + JSON.parse(this.responseText).message;
-
-                alertDiv.setAttribute("class", "alert alert-danger");
-                alertDiv.setAttribute("role", "alert");
-            }
-        }
-    }
+function submitForm() {
+    appendJsonToForm();
+    var form = document.getElementById("jsonAddForm");
+    form.submit();
 }
 
 function readFiles() {
@@ -65,7 +53,7 @@ function readFile(file) {
 
         } catch (err) {
             fileStatusAlert.setAttribute("class", "alert alert-danger");
-            fileStatusAlert.innerHTML = "<strong>Błąd!\t<strong>"+
+            fileStatusAlert.innerHTML = "<strong>Błąd!\t<strong>" +
                 err +
                 "<span class='glyphicon glyphicon-remove float-right'></span>";
         }
@@ -121,7 +109,7 @@ function checkFirstLineFormat(line) {
     }
 
     for (var i = 1; i < characterNumber; i++) {
-        var digit =  parseInt(line.toString().charAt(i), 10);
+        var digit = parseInt(line.toString().charAt(i), 10);
         if (isNaN(digit)) {
             return false;
         }
@@ -129,4 +117,9 @@ function checkFirstLineFormat(line) {
 
     return true;
 }
+
+
+
+
+
 
