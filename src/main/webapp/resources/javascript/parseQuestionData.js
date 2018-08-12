@@ -2,6 +2,7 @@ var howManyTimesToAsk = 3;
 var jsonData = document.getElementById("jsonData").value;
 
 var questions = JSON.parse(jsonData);
+var boardStatus;
 
 var questionsNumber = questions.length;
 var pendingQuestions = [];
@@ -11,17 +12,86 @@ var secondsPassed = 0;
 var minutesPassed = 0;
 var hoursPassed = 0;
 
-for (var i = 0; i < questionsNumber; i++)
+$(document).keydown(function (e)
 {
-    var question = questions[i];
+    if (e.keyCode === 13)
+    {
+        var button = $("#nextQuestionButton");
+        if (button !== null)
+        {
+            button.click();
+        }
+    }
+});
 
-    pendingQuestions[i] = {"questionIndex": i, "timesToAskLeft": howManyTimesToAsk};
+saveBoardHtml();
+resetQuizState();
+drawWinBoard();
+
+function resetQuizState()
+{
+    restoreBoardInitialStatus();
+
+    for (var i = 0; i < questionsNumber; i++)
+    {
+        pendingQuestions[i] = {"questionIndex": i, "timesToAskLeft": howManyTimesToAsk};
+    }
+
+    loadRandomQuestion();
+    updateProgressBar();
+
+    setInterval(function () {updateTimer()}, 1000);
 }
 
-loadRandomQuestion();
-updateProgressBar();
-setInterval(function () {updateTimer()}, 1000);
+function resetVariables()
+{
+    howManyTimesToAsk = 3;
+    jsonData = document.getElementById("jsonData").value;
 
+    questions = JSON.parse(jsonData);
+
+    questionsNumber = questions.length;
+    pendingQuestions = [];
+    answersStatusHolder = [];
+
+    secondsPassed = 0;
+    minutesPassed = 0;
+    hoursPassed = 0;
+
+    for (var i = 0; i < questionsNumber; i++)
+    {
+        pendingQuestions[i] = {"questionIndex": i, "timesToAskLeft": howManyTimesToAsk};
+    }
+}
+
+function saveBoardHtml()
+{
+    boardStatus = $("#quizBoard").html();
+}
+
+function restoreBoardInitialStatus()
+{
+    $("#quizBoard").html(boardStatus);
+}
+
+function drawWinBoard()
+{
+    $("#quizQuestion").html("<h2>GRATULACJE!</h2>");
+    $("#quizAnswers").html("<h3>Opanowałeś wszystkie pytania! Powodzenia na teście!</h3>" +
+        "<p>Kliknij w przycisk poniżej aby ponownie rozwiązać quiz</p>");
+
+
+    $("#quizPanel").html("<div class='btn btn-default btn-block' id='resetButton'></div>");
+    var button = $("#resetButton");
+
+    button.removeAttr("onclick");
+    button.attr("onclick",
+        'resetQuizState()'
+    );
+    button.html("Rozwiąż ponownie");
+
+
+}
 
 function loadRandomQuestion()
 {
@@ -125,9 +195,13 @@ function updateProgress(questionIndex)
             if ((--pendingQuestions[questionIndex].timesToAskLeft) <= 0)
             {
                 updateProgressBar();
-
                 pendingQuestions.splice(questionIndex, 1);
+                checkForWin();
             }
+        }
+        else
+        {
+            ++pendingQuestions[questionIndex].timesToAskLeft;
         }
     }
 
@@ -138,6 +212,16 @@ function updateProgress(questionIndex)
     );
     button.html("Kontynuuj");
 
+}
+
+function checkForWin()
+{
+    if (pendingQuestions.length <= 0)
+    {
+        resetVariables();
+        restoreBoardInitialStatus();
+        drawWinBoard();
+    }
 }
 
 function updateAnswerStatus(index)
