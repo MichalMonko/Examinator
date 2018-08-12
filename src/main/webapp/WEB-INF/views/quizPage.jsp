@@ -52,22 +52,6 @@
                 </div>
 
                 <div class="quizComponent text-center" id="quizAnswers">
-
-                    <%--<div class="answer">--%>
-                    <%--<p> Answer 1--%>
-                    <%--</p>--%>
-                    <%--</div>--%>
-
-                    <%--<div class="answer">--%>
-                    <%--<p> Answer 2</p>--%>
-                    <%--</div>--%>
-                    <%--<div class="answer">--%>
-                    <%--<p> Answer 3</p>--%>
-                    <%--</div>--%>
-                    <%--<div class="answer">--%>
-                    <%--<p> Answer 4</p>--%>
-                    <%--</div>--%>
-
                 </div>
 
                 <div class="quizComponent border border-light" id="quizPanel">
